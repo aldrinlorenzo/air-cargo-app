@@ -1,10 +1,16 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Request, UploadFile, File, HTTPException
+from fastapi.responses import JSONResponse, StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from conversion.services.xml_service import parse_xml
+from conversion.services.jsonld_service import to_json_ld
+from utils.file_utils import build_filename
+from ai.models.request import RequestData
+from ai.services.ai_service import run_ai
+
 import time
-import time
-from ai.models import RequestData
-from ai.service import run_ai
+import json
+import io
+
 
 app = FastAPI(title="Air Cargo Dashboard API")
 
@@ -16,22 +22,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-class XMLPayload(BaseModel):
-    xml_data: str
-
-@app.post("/api/convert")
-def convert_xml_endpoint(payload: XMLPayload):
-    try:
-        from converter import convert_xml_to_onerecord_jsonld
-        result = convert_xml_to_onerecord_jsonld(payload.xml_data)
-        
-        if "error" in result:
-            raise HTTPException(status_code=400, detail=result["details"])
-            
-        return result
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Conversion failed: {str(e)}")
 
 @app.get("/")
 def read_root():
@@ -115,6 +105,93 @@ def get_uld_status():
             "milestones": ["RCL", "MAN", "DEP"]
         }
     ]
+
+# File upload > JSON-LD response
+@app.post("/convert")
+async def convert(file: UploadFile = File(...)):
+    if not file.filename.endswith(".xml"):
+        raise HTTPException(status_code=400, detail="Only XML files allowed")
+
+    try:
+        xml_bytes = await file.read()
+
+        parsed = parse_xml(xml_bytes)
+        json_ld = to_json_ld(parsed)
+
+        return JSONResponse(content=json_ld)
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+# File upload > Download JSON-LD file
+@app.post("/convert/download")
+async def convert_download(file: UploadFile = File(...)):
+    if not file.filename.endswith(".xml"):
+        raise HTTPException(status_code=400, detail="Only XML files allowed")
+
+    try:
+        xml_bytes = await file.read()
+
+        parsed = parse_xml(xml_bytes)
+        json_ld = to_json_ld(parsed)
+
+        json_str = json.dumps(json_ld, indent=2, ensure_ascii=False)
+
+        output_filename = build_filename(file.filename)
+
+        return StreamingResponse(
+            io.BytesIO(json_str.encode("utf-8")),
+            media_type="application/ld+json",
+            headers={
+                "Content-Disposition": f'attachment; filename="{output_filename}"'
+            }
+        )
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+# Raw XML > JSON-LD response
+@app.post("/convert/raw")
+async def convert_raw(request: Request):
+    xml_bytes = await request.body()
+
+    if not xml_bytes:
+        return JSONResponse(
+            status_code=400,
+            content={"error": "Empty XML body"}
+        )
+
+    parsed = parse_xml(xml_bytes)
+    json_ld = to_json_ld(parsed)
+
+    return JSONResponse(content=json_ld)
+
+# Raw XML > Download JSON-LD file
+@app.post("/convert/raw/download")
+async def convert_raw_download(request: Request):
+    xml_bytes = await request.body()
+
+    if not xml_bytes:
+        return JSONResponse(
+            status_code=400,
+            content={"error": "Empty XML body"}
+        )
+
+    parsed = parse_xml(xml_bytes)
+    json_ld = to_json_ld(parsed)
+
+    json_str = json.dumps(json_ld, indent=2, ensure_ascii=False)
+
+    original_filename = request.headers.get("x-filename", "input.xml")
+    output_filename = build_filename(original_filename)
+
+    return StreamingResponse(
+        io.BytesIO(json_str.encode("utf-8")),
+        media_type="application/json",
+        headers={
+            "Content-Disposition": f'attachment; filename="{output_filename}"'
+        }
+    )
 
 @app.post("/ai")
 def ai_endpoint(data: RequestData):

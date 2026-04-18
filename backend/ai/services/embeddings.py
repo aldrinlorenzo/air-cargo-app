@@ -1,8 +1,5 @@
 import google.generativeai as genai
 import numpy as np
-import os
-
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 
 def get_embedding(text: str):

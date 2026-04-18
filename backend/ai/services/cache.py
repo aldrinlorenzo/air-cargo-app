@@ -4,9 +4,9 @@ SEMANTIC_CACHE = []
 SIMILARITY_THRESHOLD = 0.88
 
 
-def search_cache(new_embedding):
+def search_cache(embedding):
     for item in SEMANTIC_CACHE:
-        score = cosine_similarity(new_embedding, item["embedding"])
+        score = cosine_similarity(embedding, item["embedding"])
 
         if score >= SIMILARITY_THRESHOLD:
             return item["result"]

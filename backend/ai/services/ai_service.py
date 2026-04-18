@@ -1,22 +1,18 @@
-import google.generativeai as genai
 import os
 import json
 import re
 
+from ..core.gemini import genai
 from .prompt_builder import PromptBuilder
 from .prompts import SYSTEM_PROMPT
-
 from .embeddings import get_embedding
 from .cache import search_cache, store_cache
+from .intent_normalizer import normalize_intent
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 model = genai.GenerativeModel("gemini-2.5-flash")
-
 builder = PromptBuilder(SYSTEM_PROMPT)
 
-SEMANTIC_CACHE = []
-SIMILARITY_THRESHOLD = 0.88
 
 def extract_json(text: str):
     match = re.search(r"\{.*\}", text, re.DOTALL)
@@ -37,17 +33,20 @@ def extract_json(text: str):
         }
 
 def run_ai(user_text: str):
-    embedding = get_embedding(user_text)
+    intent = normalize_intent(user_text)
+
+    normalized_input = f"{intent}:{user_text}"
+    embedding = get_embedding(normalized_input)
 
     cached = search_cache(embedding)
 
     if cached:
         # To validate if caching is working
-        # return {
-        #     "cached": True,
-        #     "data": cached
-        # }
-        return cached
+        return {
+            "cached": True,
+            "data": cached
+        }
+        # return cached
 
     prompt = builder.build(user_text)
 
@@ -63,9 +62,9 @@ def run_ai(user_text: str):
     store_cache(embedding, result)
 
     # To validate if caching is working
-    # return {
-    #     "cached": False,
-    #     "data": result
-    # }
+    return {
+        "cached": False,
+        "data": result
+    }
 
-    return result
+    # return result
