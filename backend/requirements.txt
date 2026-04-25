@@ -5,3 +5,4 @@ xmltodict
 google.generativeai
 python-dotenv
 httpx
+numpy

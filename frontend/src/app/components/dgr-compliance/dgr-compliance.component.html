@@ -25,7 +25,8 @@
     [style.width]="sidebarCollapsed ? '72px' : '256px'">
     <nav class="flex flex-col gap-1">
         <a class="flex items-center gap-3 px-3 py-2 bg-white text-red-700 shadow-sm rounded-md font-medium text-sm transition-all cursor-pointer"
-            [class.translate-x-1]="!sidebarCollapsed" [class.justify-center]="sidebarCollapsed" routerLink="/dgd-check">
+            [class.translate-x-1]="!sidebarCollapsed" [class.justify-center]="sidebarCollapsed"
+            routerLink="/dg-shipment">
             <span class="material-symbols-outlined">deployed_code</span>
             <span *ngIf="!sidebarCollapsed">DG Shipment</span>
         </a>
@@ -140,7 +141,7 @@
             <div class="flex items-center gap-2 mb-4">
                 <span class="material-symbols-outlined text-primary"
                     style="font-variation-settings:'FILL' 1">article</span>
-                <h2 class="font-headline font-bold text-lg text-on-surface">Waybill Master</h2>
+                <h2 class="font-headline font-bold text-lg text-on-surface">Master AWB</h2>
                 <span class="ml-auto text-[10px] font-mono bg-slate-100 px-2 py-1 rounded text-slate-500">{{
                     masterWaybill?.type }}</span>
             </div>
@@ -150,24 +151,12 @@
                     <p class="font-semibold text-on-surface">{{ masterWaybill?.awbNumber || '—' }}</p>
                 </div>
                 <div>
-                    <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">Prefix</p>
-                    <p class="font-semibold text-on-surface">{{ masterWaybill?.prefix || '—' }}</p>
-                </div>
-                <div>
-                    <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">Carrier</p>
-                    <p class="font-semibold text-on-surface">{{ masterWaybill?.carrier || '—' }}</p>
-                </div>
-                <div>
                     <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">Origin</p>
                     <p class="font-semibold text-on-surface">{{ masterWaybill?.origin || '—' }}</p>
                 </div>
                 <div>
                     <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">Destination</p>
                     <p class="font-semibold text-on-surface">{{ masterWaybill?.destination || '—' }}</p>
-                </div>
-                <div>
-                    <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">Object ID</p>
-                    <p class="font-mono text-xs text-slate-500 break-all">{{ formatId(masterWaybill?.id) }}</p>
                 </div>
             </div>
         </div>
@@ -178,7 +167,7 @@
             <div class="flex items-center gap-2 mb-4">
                 <span class="material-symbols-outlined text-secondary"
                     style="font-variation-settings:'FILL' 1">receipt_long</span>
-                <h2 class="font-headline font-bold text-lg text-on-surface">House Waybills</h2>
+                <h2 class="font-headline font-bold text-lg text-on-surface">House AWBs</h2>
                 <span class="ml-2 bg-secondary/10 text-secondary text-[10px] font-bold px-2 py-0.5 rounded-full">{{
                     houseWaybills.length }}</span>
             </div>
@@ -189,25 +178,16 @@
                             <th class="px-4 py-3 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
                                 AWB Number</th>
                             <th class="px-4 py-3 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
-                                Prefix</th>
-                            <th class="px-4 py-3 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
                                 Origin</th>
                             <th class="px-4 py-3 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
                                 Destination</th>
-                            <th class="px-4 py-3 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
-                                Carrier</th>
-                            <th class="px-4 py-3 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">ID
-                            </th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
                         <tr *ngFor="let hwb of houseWaybills" class="hover:bg-slate-50 transition-colors">
                             <td class="px-4 py-3 text-xs font-bold text-primary">{{ hwb.awbNumber || '—' }}</td>
-                            <td class="px-4 py-3 text-xs">{{ hwb.prefix || '—' }}</td>
                             <td class="px-4 py-3 text-xs">{{ hwb.origin || '—' }}</td>
                             <td class="px-4 py-3 text-xs">{{ hwb.destination || '—' }}</td>
-                            <td class="px-4 py-3 text-xs">{{ hwb.carrier || '—' }}</td>
-                            <td class="px-4 py-3 text-[10px] font-mono text-slate-400">{{ formatId(hwb.id) }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -371,33 +351,31 @@
                             {{ check.checkId || '—' }}
                         </span>
 
-                        <!-- Check Name -->
-                        <span class="text-xs font-semibold text-on-surface flex-1">{{ check.checkType || '—' }}</span>
+                        <!-- Check Name + Result badge inline -->
+                        <span class="text-xs font-semibold text-on-surface flex-1 flex items-center gap-2">
+                            {{ check.checkType || '—' }}
+                            <span [ngClass]="{
+                                'bg-emerald-50 text-emerald-700 border-emerald-100': getCheckStatusClass(check.checkResult) === 'status-pass',
+                                'bg-red-50 text-red-700 border-red-100': getCheckStatusClass(check.checkResult) === 'status-fail',
+                                'bg-amber-50 text-amber-700 border-amber-100': getCheckStatusClass(check.checkResult) === 'status-pending'
+                            }" class="px-3 py-1 rounded-full text-[10px] font-bold border">
+                                {{ getCheckStatusLabel(check.checkResult) }}
+                            </span>
+                        </span>
 
                         <!-- Check Status -->
                         <span *ngIf="check.checkStatus"
-                            class="text-[10px] font-mono text-slate-500 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded">
+                            class="text-[10px] font-mono px-2 py-0.5 rounded"
+                            [ngClass]="{
+                                'text-blue-700 bg-blue-50 border border-blue-200': check.checkStatus.toLowerCase() === 'completed',
+                                'text-slate-500 bg-slate-50 border border-slate-200': check.checkStatus.toLowerCase() !== 'completed'
+                            }">
                             {{ check.checkStatus }}
-                        </span>
-
-                        <!-- Result badge -->
-                        <span [ngClass]="{
-                            'bg-emerald-50 text-emerald-700 border-emerald-100': getCheckStatusClass(check.checkResult) === 'status-pass',
-                            'bg-red-50 text-red-700 border-red-100': getCheckStatusClass(check.checkResult) === 'status-fail',
-                            'bg-amber-50 text-amber-700 border-amber-100': getCheckStatusClass(check.checkResult) === 'status-pending'
-                        }" class="px-3 py-1 rounded-full text-[10px] font-bold border">
-                            {{ getCheckStatusLabel(check.checkResult) }}
                         </span>
 
                         <!-- Created On -->
                         <span class="text-[10px] text-slate-400 min-w-[100px] text-right">{{ check.createdOn || ''
                             }}</span>
-
-                        <!-- Sub-check count -->
-                        <span *ngIf="check.subChecks?.length"
-                            class="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
-                            {{ check.subChecks.length }} sub
-                        </span>
                     </div>
 
                     <!-- Expanded Sub-checks -->

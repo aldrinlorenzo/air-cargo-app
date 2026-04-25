@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ChatbotService } from '../../services/chatbot.service';
 
 const API_BASE = 'http://localhost:8000';
 
@@ -85,7 +86,7 @@ export class DgShipmentComponent {
     { id: 5, label: 'Verify', icon: 'verified', desc: 'Final DGD' },
   ];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private chatbotService: ChatbotService) { }
 
   // ── File handling ─────────────────────────────────────────────────────────
   onDragOver(e: DragEvent) { e.preventDefault(); this.isDragging = true; }
@@ -99,7 +100,10 @@ export class DgShipmentComponent {
   }
   readFile(file: File) {
     const reader = new FileReader();
-    reader.onload = (ev: any) => { this.rawXml = ev.target.result; };
+    reader.onload = (ev: any) => {
+      this.rawXml = ev.target.result;
+      this.chatbotService.updateXmlContext(this.rawXml);
+    };
     reader.readAsText(file);
   }
 
@@ -194,6 +198,27 @@ export class DgShipmentComponent {
         this.dgd = res.dgd;
         this.isLoading = false;
         this.currentStep = 2;
+        // Push DGD data to chatbot for context-aware conversations
+        this.chatbotService.updateAwbContext({
+          masterWaybill: { awbNumber: this.dgd?.awb_number, origin: this.dgd?.origin, destination: this.dgd?.destination },
+          shipments: [{
+            description: 'DG Shipment',
+            totalWeight: this.dgd?.gross_weight,
+            weightUnit: this.dgd?.weight_unit,
+            pieces: [{
+              dangerousGoods: (this.dgd?.dg_items || []).map((item: any) => ({
+                unNumber: item.un_number,
+                properShippingName: item.proper_shipping_name,
+                hazardClass: item.hazard_class,
+                packingGroup: item.packing_group,
+                packingInstruction: item.packing_instruction,
+                quantity: item.quantity,
+                unit: item.quantity_unit
+              }))
+            }]
+          }],
+          checks: []
+        });
       },
       error: (err) => {
         this.isLoading = false;

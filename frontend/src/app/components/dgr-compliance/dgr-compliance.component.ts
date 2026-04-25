@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService, AwbDashboardData, CheckResult, SubCheck, Piece, DangerousGood, Shipment, WaybillInfo } from '../../services/api.service';
+import { ChatbotService } from '../../services/chatbot.service';
 
 @Component({
   selector: 'app-dgr-compliance',
@@ -81,7 +82,7 @@ export class DgrComplianceComponent implements OnInit {
     return this.allPieces.length;
   }
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService, private chatbotService: ChatbotService) { }
 
   ngOnInit(): void {
   }
@@ -99,10 +100,13 @@ export class DgrComplianceComponent implements OnInit {
       next: (data) => {
         this.dashboardData = data;
         this.isLoading = false;
+        // Push AWB data to chatbot for context-aware conversations
+        this.chatbotService.updateAwbContext(data);
       },
       error: (err) => {
         this.error = err?.error?.detail ?? err?.message ?? 'Failed to fetch AWB data from ONE Record.';
         this.isLoading = false;
+        this.chatbotService.clearAwbContext();
       }
     });
   }

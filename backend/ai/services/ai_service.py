@@ -32,39 +32,56 @@ def extract_json(text: str):
             "raw_output": text
         }
 
-def run_ai(user_text: str):
+def run_ai(user_text: str, context: str = None):
     intent = normalize_intent(user_text)
 
     normalized_input = f"{intent}:{user_text.strip().lower()}"
-    embedding = get_embedding(normalized_input)
 
-    cached = search_cache(embedding)
+    # Try embedding + cache, but don't let failures block the AI response
+    embedding = None
+    try:
+        embedding = get_embedding(normalized_input)
 
-    if cached:
-        # To validate if caching is working
+        # Skip cache when context data is provided (responses are shipment-specific)
+        if not context and embedding is not None:
+            cached = search_cache(embedding)
+            if cached:
+                return {
+                    "cached": True,
+                    "data": cached
+                }
+    except Exception as e:
+        print(f"[WARN] Embedding/cache lookup failed (non-fatal): {e}")
+
+    prompt = builder.build(user_text, context=context)
+
+    try:
+        response = model.generate_content(
+            prompt,
+            generation_config={
+                "temperature": 0.2
+            }
+        )
+
+        result = extract_json(response.text)
+    except Exception as e:
+        print(f"[ERROR] Gemini generate_content failed: {e}")
         return {
-            "cached": True,
-            "data": cached
+            "cached": False,
+            "data": {
+                "status": "error",
+                "answer": f"I'm having trouble connecting to the AI service. Please try again later. (Error: {str(e)[:100]})"
+            }
         }
-        # return cached
 
-    prompt = builder.build(user_text)
+    # Only cache non-context responses when embedding succeeded
+    if not context and embedding is not None:
+        try:
+            store_cache(embedding, result)
+        except Exception as e:
+            print(f"[WARN] Cache store failed (non-fatal): {e}")
 
-    response = model.generate_content(
-        prompt,
-        generation_config={
-            "temperature": 0.2
-        }
-    )
-
-    result = extract_json(response.text)
-
-    store_cache(embedding, result)
-
-    # To validate if caching is working
     return {
         "cached": False,
         "data": result
     }
-
-    # return result

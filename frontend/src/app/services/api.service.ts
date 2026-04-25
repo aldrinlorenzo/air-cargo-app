@@ -83,7 +83,7 @@ export interface AwbDashboardData {
   providedIn: 'root'
 })
 export class ApiService {
-  private backendUrl = 'https://air-cargo-app-backend.vercel.app';
+  private backendUrl = 'http://localhost:8000';
 
   constructor(private http: HttpClient) { }
 

@@ -18,6 +18,17 @@ export class ChatbotComponent implements OnInit {
   userInput: string = '';
   isLoading = false;
   xmlContext: string | null = null;
+  awbContext: string | null = null;
+  hasAwbData = false;
+
+  // Quick action suggestions
+  quickActions: string[] = [
+    'What DG items are in this shipment?',
+    'Did all checks pass?',
+    'What is the DG declaration process?',
+    'Explain IATA DG AutoCheck',
+    'What packing instructions apply?'
+  ];
 
   constructor(private http: HttpClient, private chatbotService: ChatbotService) {}
 
@@ -25,16 +36,26 @@ export class ChatbotComponent implements OnInit {
     this.chatbotService.currentXmlContext.subscribe(xml => {
       this.xmlContext = xml;
     });
+
+    this.chatbotService.currentAwbContext.subscribe(awb => {
+      this.awbContext = awb;
+      this.hasAwbData = !!awb;
+    });
     
     // Initial greeting
     this.messages.push({
       role: 'assistant',
-      content: 'Hello! I am your DGR Assistant. How can I help you with aviation compliance today?'
+      content: 'Hello! I\'m Skyler, your DGR Assistant. I can help you with:\n\n• DG shipment details & check results\n• IATA Dangerous Goods Regulations\n• DG declaration & AutoCheck processes\n• Packing instructions & compliance\n\nSearch an AWB above and I\'ll have your shipment context ready!'
     });
   }
 
   toggleChat() {
     this.isOpen = !this.isOpen;
+  }
+
+  useQuickAction(action: string) {
+    this.userInput = action;
+    this.sendMessage();
   }
 
   sendMessage() {
@@ -45,21 +66,31 @@ export class ChatbotComponent implements OnInit {
     this.userInput = '';
     this.isLoading = true;
 
-    // Build the prompt by appending the XML context if it exists
-    let promptText = userText;
+    // Build context from all available sources
+    const contextParts: string[] = [];
+    
+    if (this.awbContext) {
+      contextParts.push(this.awbContext);
+    }
+    
     if (this.xmlContext) {
-      promptText += `\n\nContext - Uploaded XML File:\n${this.xmlContext}`;
+      contextParts.push(`\n=== UPLOADED XSDG XML ===\n${this.xmlContext}`);
     }
 
-    this.http.post<any>('http://localhost:8000/ai', { text: promptText }).subscribe({
+    const context = contextParts.length > 0 ? contextParts.join('\n') : null;
+
+    this.http.post<any>('http://localhost:8000/ai', { 
+      text: userText,
+      context: context
+    }).subscribe({
       next: (response) => {
-        const result = response.result || response;
+        const result = response.result?.data || response.result || response;
         let answer = "I couldn't process that request.";
         
         if (result.answer) {
           answer = result.answer;
         } else if (result.violation) {
-          answer = `**Violation:** ${result.violation}\n\n**Reference:** ${result.regulation_reference || 'N/A'}\n\n**Action Required:** ${result.action_required || 'None'}`;
+          answer = `⚠️ Violation: ${result.violation}\n\n📋 Reference: ${result.regulation_reference || 'N/A'}\n\n🔧 Action Required: ${result.action_required || 'None'}`;
         } else if (result.message) {
           answer = result.message;
         }
@@ -70,7 +101,7 @@ export class ChatbotComponent implements OnInit {
       },
       error: (error) => {
         console.error('Chat error:', error);
-        this.messages.push({ role: 'assistant', content: 'Sorry, I am having trouble connecting to the backend.' });
+        this.messages.push({ role: 'assistant', content: 'Sorry, I\'m having trouble connecting to the backend. Please make sure the backend server is running on port 8000.' });
         this.isLoading = false;
         this.scrollToBottom();
       }
