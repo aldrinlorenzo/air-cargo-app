@@ -3,7 +3,7 @@
     class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl flex justify-between items-center px-8 h-16 shadow-sm">
     <div class="flex items-center gap-2">
         <img src="assets/skyler.png" alt="Skyler" class="h-8 w-auto object-contain">
-        <span class="text-xl font-black tracking-tighter text-red-700 dark:text-red-500 font-headline">Skyler</span>
+        <span class="text-xl font-black tracking-tighter text-red-700 dark:text-red-500 font-headline">SKYLER</span>
     </div>
     <nav class="hidden md:flex gap-6 font-headline tracking-tight font-bold text-sm">
         <a routerLink="/dgr-compliance"
@@ -56,11 +56,12 @@
 
     <!-- Loading State -->
     <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-24 gap-4">
-        <svg class="w-12 h-12 animate-spin text-primary" viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="10"/>
-            <path d="M50 40 C50 40 42 20 30 10 A45 45 0 0 1 70 10 C58 20 50 40 50 40Z"/>
-            <path d="M43 47 C43 47 22 44 8 50 A45 45 0 0 1 30 85 C32 70 43 47 43 47Z"/>
-            <path d="M57 47 C57 47 78 44 92 50 A45 45 0 0 1 70 85 C68 70 57 47 57 47Z"/>
+        <svg class="w-12 h-12 animate-spin text-primary" viewBox="0 0 100 100" fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="10" />
+            <path d="M50 40 C50 40 42 20 30 10 A45 45 0 0 1 70 10 C58 20 50 40 50 40Z" />
+            <path d="M43 47 C43 47 22 44 8 50 A45 45 0 0 1 30 85 C32 70 43 47 43 47Z" />
+            <path d="M57 47 C57 47 78 44 92 50 A45 45 0 0 1 70 85 C68 70 57 47 57 47Z" />
         </svg>
         <p class="text-sm font-medium text-slate-500">Fetching ONE Record data for <span
                 class="font-bold text-primary">{{ awbId }}</span>…</p>
