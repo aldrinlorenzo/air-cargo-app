@@ -8,6 +8,7 @@ import { DgrComplianceComponent } from './components/dgr-compliance/dgr-complian
 import { DgConverterComponent } from './components/dg-converter/dg-converter.component';
 import { ChatbotComponent } from './components/chatbot/chatbot.component';
 import { JsonConverterComponent } from './components/json-converter/json-converter.component';
+import { DgShipmentComponent } from './components/dg-shipment/dg-shipment.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { JsonConverterComponent } from './components/json-converter/json-convert
     DgrComplianceComponent,
     DgConverterComponent,
     ChatbotComponent,
-    JsonConverterComponent
+    JsonConverterComponent,
+    DgShipmentComponent
   ],
   imports: [
     BrowserModule,

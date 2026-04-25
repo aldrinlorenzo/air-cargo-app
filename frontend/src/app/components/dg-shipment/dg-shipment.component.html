@@ -1,0 +1,430 @@
+<!-- Top Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-xl shadow-sm flex justify-between items-center px-8 h-16">
+  <div class="flex items-center gap-8">
+    <span class="text-xl font-black tracking-tighter text-red-700">DG AutoLink</span>
+  </div>
+  <div class="flex items-center gap-4">
+    <button class="p-2 hover:bg-slate-100 rounded-full transition-colors">
+      <span class="material-symbols-outlined text-slate-600">notifications</span>
+    </button>
+    <button class="p-2 hover:bg-slate-100 rounded-full transition-colors">
+      <span class="material-symbols-outlined text-slate-600">settings</span>
+    </button>
+    <img alt="User profile" class="w-8 h-8 rounded-full border border-slate-200"
+      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPn9-h76O3kp8HDj7KFTdOitg_55G6mtfuTtuzWX3v7-oKc4uRenTHL0w3NEAgwVtoj8_gnZciIRCwevH4a0T8ADzmxHUBXLplTnZGKsokQsv08G_OSeuODQgn3W3DnSCRPBIyPIs72JwlCgobBTaD6DmEPs461RdDep7tybQX6MnOHzhnQU-0shHLPhhwo4on-llnb0hWt5pN8b_tb3cvtPvLk1MCRMDGuKTJqXdhelJIwzPQkcAkqUngv20Uzw3hDFDb0yIxQhRV" />
+  </div>
+</nav>
+
+<!-- Side Navigation -->
+<aside
+  class="h-screen w-64 fixed left-0 top-0 pt-20 border-r border-slate-100 flex flex-col gap-2 p-4 bg-slate-50 z-40">
+  <nav class="flex flex-col gap-1">
+    <!-- <a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-red-50 transition-all rounded-md font-medium text-sm cursor-pointer"
+      routerLink="/dgr-compliance">
+      <span class="material-symbols-outlined">dashboard</span> Dashboard
+    </a> -->
+    <a class="flex items-center gap-3 px-3 py-2 bg-white text-red-700 shadow-sm rounded-md font-medium text-sm translate-x-1 cursor-pointer"
+      routerLink="/dg-shipment">
+      <span class="material-symbols-outlined">local_shipping</span> DG Shipment
+    </a>
+    <!-- <a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-red-50 transition-all rounded-md font-medium text-sm cursor-pointer"
+      routerLink="/dg-converter">
+      <span class="material-symbols-outlined">data_object</span> XML to JSON-LD Tool
+    </a>
+    <a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-red-50 transition-all rounded-md font-medium text-sm cursor-pointer"
+      routerLink="/json-converter">
+      <span class="material-symbols-outlined">data_array</span> JSON to JSON-LD Tool
+    </a> -->
+  </nav>
+  <div class="mt-auto flex flex-col gap-1 border-t border-slate-200 pt-4">
+    <a
+      class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-red-50 text-xs uppercase tracking-wide cursor-pointer">
+      <span class="material-symbols-outlined text-sm">headset_mic</span> Support
+    </a>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="ml-64 pt-24 px-10 pb-12 min-h-screen bg-slate-50">
+
+  <!-- Page Header -->
+  <header class="mb-8">
+    <span
+      class="px-2 py-0.5 bg-red-100 text-red-700 text-[10px] font-bold uppercase tracking-widest rounded-full">1Neo-Connect
+      + DG AutoCheck</span>
+    <h1 class="text-4xl font-extrabold tracking-tighter text-slate-900 mt-2 mb-1">DG Shipment</h1>
+    <p class="text-slate-500 text-base">End-to-end DG shipment lifecycle — from XSDG upload to DG AutoCheck
+      verification, powered by 1Neo-Connect.</p>
+  </header>
+
+  <!-- ── STEP PROGRESS INDICATOR ── -->
+  <div class="flex items-center mb-10">
+    <ng-container *ngFor="let step of steps; let i = index">
+      <div class="flex flex-col items-center">
+        <div class="step-circle" [class.step-active]="isStepActive(step.id)"
+          [class.step-done]="isStepCompleted(step.id)"
+          [class.step-upcoming]="!isStepActive(step.id) && !isStepCompleted(step.id)">
+          <span *ngIf="!isStepCompleted(step.id)" class="material-symbols-outlined text-sm">{{ step.icon }}</span>
+          <span *ngIf="isStepCompleted(step.id)" class="material-symbols-outlined text-sm">check</span>
+        </div>
+        <span class="text-[10px] font-bold mt-1 uppercase tracking-wider" [class.text-red-700]="isStepActive(step.id)"
+          [class.text-emerald-600]="isStepCompleted(step.id)"
+          [class.text-slate-400]="!isStepActive(step.id) && !isStepCompleted(step.id)">
+          {{ step.label }}
+        </span>
+        <span class="text-[9px] text-slate-400">{{ step.desc }}</span>
+      </div>
+      <div *ngIf="i < steps.length - 1" class="step-connector" [class.step-connector-done]="isStepCompleted(step.id)">
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- ── ERROR BANNER ── -->
+  <div *ngIf="errorMessage"
+    class="mb-6 flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 px-5 py-4 rounded-xl text-sm font-medium">
+    <span class="material-symbols-outlined">error</span>
+    {{ errorMessage }}
+    <button (click)="errorMessage=''" class="ml-auto text-red-400 hover:text-red-700"><span
+        class="material-symbols-outlined text-sm">close</span></button>
+  </div>
+
+  <!-- ── LOADING OVERLAY ── -->
+  <div *ngIf="isLoading"
+    class="mb-6 flex items-center gap-4 bg-white border border-slate-200 px-6 py-5 rounded-xl shadow-sm">
+    <div class="spinner"></div>
+    <div>
+      <p class="text-sm font-bold text-slate-800">{{ loadingMessage }}</p>
+      <p class="text-xs text-slate-400 mt-0.5">This may take a few seconds…</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- STEP 1 — CREATE                                                         -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <section *ngIf="currentStep === 1" class="card animate-fade-in">
+    <div class="card-header">
+      <span class="step-badge">Step 1</span>
+      <h2 class="card-title">Create ONE Record DG Shipment</h2>
+      <p class="card-subtitle">Upload the XML Shipper's Declaration for Dangerous Goods (XSDG). The system will parse it
+        and create a ONE Record-compliant DG shipment.</p>
+    </div>
+
+    <!-- Drop Zone -->
+    <div class="drop-zone mt-6" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)" [class.drop-zone-active]="isDragging" (click)="fileInput.click()">
+      <input type="file" #fileInput (change)="onFileSelected($event)" class="hidden" accept=".xml">
+      <div class="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mb-4">
+        <span class="material-symbols-outlined text-red-600 text-3xl">upload_file</span>
+      </div>
+      <h3 class="text-base font-bold text-slate-800 mb-1">Drop your XSDG file here</h3>
+      <p class="text-sm text-slate-500 mb-4">XML Shipper's Declaration for Dangerous Goods</p>
+      <div class="flex gap-3" (click)="$event.stopPropagation()">
+        <button class="btn-primary" (click)="fileInput.click()">Browse File</button>
+        <button class="btn-outline" (click)="loadSample()">Load Sample XSDG</button>
+      </div>
+    </div>
+
+    <!-- File loaded indicator -->
+    <div *ngIf="rawXml"
+      class="mt-4 flex items-center gap-3 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl text-sm font-medium">
+      <span class="material-symbols-outlined">task_alt</span>
+      XSDG loaded ({{ rawXml.length | number }} characters) — ready to create shipment.
+    </div>
+
+    <div class="flex gap-3 mt-6">
+      <button class="btn-primary btn-lg" (click)="createShipment()" [disabled]="!rawXml || isLoading">
+        <span class="material-symbols-outlined text-sm">add_circle</span>
+        Create 1R DG Shipment
+      </button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- STEP 2 — VIEW DGD                                                       -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <section *ngIf="currentStep === 2 && dgd" class="animate-fade-in">
+    <!-- ONE Record creation badge -->
+    <div class="mb-4 flex items-center gap-3 bg-emerald-50 border border-emerald-200 px-4 py-3 rounded-xl">
+      <span class="material-symbols-outlined text-emerald-600"
+        style="font-variation-settings:'FILL' 1">check_circle</span>
+      <div>
+        <p class="text-xs font-bold text-emerald-700">ONE Record Shipment Created</p>
+        <p class="text-[11px] text-slate-500 font-mono">{{ oneRecordId }} · Created {{ formattedCreatedAt }}</p>
+      </div>
+    </div>
+
+    <!-- DGD Card -->
+    <ng-container *ngTemplateOutlet="dgdCard; context: { showResults: false }"></ng-container>
+
+    <div class="flex gap-3 mt-6">
+      <button class="btn-primary btn-lg" (click)="proceedToCheck()">
+        <span class="material-symbols-outlined text-sm">fact_check</span>
+        Perform DG AutoCheck
+      </button>
+      <button class="btn-ghost" (click)="reset()">Start Over</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- STEP 3 — DG AUTOCHECK                                                   -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <section *ngIf="currentStep === 3" class="animate-fade-in">
+    <div class="card">
+      <div class="card-header">
+        <span class="step-badge">Step 3</span>
+        <h2 class="card-title">DG AutoCheck Verification</h2>
+        <p class="card-subtitle">The original XSDG will be sent to the IATA DG AutoCheck Connect API. The API validates
+          against IATA DGR regulations and returns a detailed check result.</p>
+      </div>
+
+      <!-- What gets sent -->
+      <div class="mt-6 bg-slate-50 rounded-xl border border-slate-200 p-5">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="material-symbols-outlined text-slate-500 text-sm">send</span>
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-500">What's being sent to DG
+            AutoCheck</span>
+        </div>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <div><span class="label">AWB Number</span><span class="value">{{ dgd?.awb_number }}</span></div>
+          <div><span class="label">Shipment ID</span><span class="value font-mono text-xs">{{ shipmentId }}</span></div>
+          <div><span class="label">Origin</span><span class="value">{{ dgd?.origin }}</span></div>
+          <div><span class="label">Destination</span><span class="value">{{ dgd?.destination }}</span></div>
+          <div><span class="label">UN Number(s)</span>
+            <span class="value">{{ dgd?.dg_items?.[0]?.un_number || 'N/A' }}</span>
+          </div>
+          <div><span class="label">Payload</span><span class="value">Original XSDG XML</span></div>
+        </div>
+      </div>
+
+      <div class="flex gap-3 mt-6">
+        <button class="btn-check btn-lg" (click)="performCheck()" [disabled]="isLoading">
+          <span class="material-symbols-outlined text-sm">verified_user</span>
+          Send to DG AutoCheck
+        </button>
+        <button class="btn-ghost" (click)="currentStep = 2">Back to DGD</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- STEP 4 is automatic (triggered after check) - shown briefly via loader  -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- STEP 5 — FINAL DGD WITH RESULTS                                         -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <section *ngIf="currentStep === 5" class="animate-fade-in">
+
+    <!-- API note if using mock -->
+    <div *ngIf="apiNote"
+      class="mb-4 flex items-center gap-3 bg-amber-50 border border-amber-200 px-4 py-3 rounded-xl text-sm text-amber-800">
+      <span class="material-symbols-outlined text-amber-600">info</span>
+      {{ apiNote }}
+    </div>
+
+    <!-- Status banner -->
+    <div class="status-banner mb-6" [class.status-passed]="checkStatus === 'PASSED'"
+      [class.status-failed]="checkStatus === 'FAILED'">
+      <div class="flex items-center gap-4">
+        <div class="status-icon" [class.status-icon-passed]="checkStatus === 'PASSED'"
+          [class.status-icon-failed]="checkStatus === 'FAILED'">
+          <span class="material-symbols-outlined text-3xl" style="font-variation-settings:'FILL' 1">
+            {{ checkStatus === 'PASSED' ? 'verified' : 'cancel' }}
+          </span>
+        </div>
+        <div>
+          <p class="text-2xl font-black tracking-tight">{{ checkStatus === 'PASSED' ? '✓ DG AutoCheck PASSED' : '✗ DG
+            AutoCheck FAILED' }}</p>
+          <p class="text-sm opacity-80 mt-0.5">
+            {{ passCount }} of {{ checkResults.length }} checks passed ·
+            Verified {{ formattedCheckedAt }} via {{ checkSource }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DGD Card with results -->
+    <ng-container *ngTemplateOutlet="dgdCard; context: { showResults: true }"></ng-container>
+
+    <!-- Check Details Table -->
+    <div class="card mt-6">
+      <div class="flex items-center gap-3 mb-5">
+        <span class="material-symbols-outlined text-red-700" style="font-variation-settings:'FILL' 1">rule</span>
+        <h3 class="font-bold text-slate-900">DG AutoCheck — Detailed Results</h3>
+        <span class="ml-auto px-2 py-0.5 rounded-full text-[10px] font-bold"
+          [class.bg-emerald-100]="checkStatus === 'PASSED'" [class.text-emerald-700]="checkStatus === 'PASSED'"
+          [class.bg-red-100]="checkStatus === 'FAILED'" [class.text-red-700]="checkStatus === 'FAILED'">
+          {{ passCount }} PASS / {{ failCount }} FAIL
+        </span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead>
+            <tr class="bg-slate-50 text-[10px] uppercase tracking-wider text-slate-500 font-bold">
+              <th class="px-4 py-3">Check</th>
+              <th class="px-4 py-3">Category</th>
+              <th class="px-4 py-3">Regulation</th>
+              <th class="px-4 py-3">Finding</th>
+              <th class="px-4 py-3 text-center">Result</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr *ngFor="let check of checkResults" class="hover:bg-slate-50">
+              <td class="px-4 py-3 font-semibold text-slate-800">{{ check.check_name }}</td>
+              <td class="px-4 py-3 text-slate-500 text-xs">{{ check.category }}</td>
+              <td class="px-4 py-3 text-xs font-mono text-slate-400">{{ check.regulation }}</td>
+              <td class="px-4 py-3 text-xs text-slate-600 max-w-xs">{{ check.message }}</td>
+              <td class="px-4 py-3 text-center">
+                <span class="px-3 py-1 rounded-full text-[10px] font-bold"
+                  [class.bg-emerald-50]="check.result === 'PASS'" [class.text-emerald-700]="check.result === 'PASS'"
+                  [class.bg-red-50]="check.result === 'FAIL'" [class.text-red-700]="check.result === 'FAIL'"
+                  [class.bg-slate-100]="check.result === 'N/A'" [class.text-slate-500]="check.result === 'N/A'">
+                  {{ check.result }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="flex gap-3 mt-6">
+      <button class="btn-primary btn-lg" (click)="reset()">
+        <span class="material-symbols-outlined text-sm">restart_alt</span>
+        New Shipment
+      </button>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="w-full py-8 border-t border-slate-200 bg-slate-50 ml-64">
+  <div class="flex flex-col md:flex-row justify-between items-center px-12 gap-4">
+    <div class="flex flex-col items-start gap-1">
+      <img src="assets/logo.png" alt="A1R Cargo Rangers Logo" class="h-10 w-auto object-contain">
+      <p class="text-[10px] text-slate-400">Made with ❤️ by A1R Cargo Rangers. The source code is available in Github.
+      </p>
+    </div>
+    <div class="flex gap-6 text-xs text-slate-500 uppercase tracking-wide">
+      <a class="hover:text-slate-800 cursor-pointer underline underline-offset-4">Terms of Carriage</a>
+      <a class="hover:text-slate-800 cursor-pointer underline underline-offset-4">Safety Protocol</a>
+      <a class="hover:text-slate-800 cursor-pointer underline underline-offset-4">API Docs</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- DGD CARD TEMPLATE                                                           -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<ng-template #dgdCard let-showResults="showResults">
+  <div class="dgd-card" *ngIf="dgd">
+    <!-- DGD Header -->
+    <div class="dgd-header">
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="text-[9px] uppercase tracking-widest text-slate-500 font-bold mb-1">IATA Shipper's Declaration for
+            Dangerous Goods</p>
+          <h2 class="text-2xl font-black tracking-tight text-slate-900">AWB {{ dgd.awb_number }}</h2>
+          <p class="text-xs text-slate-500 mt-1 font-mono">{{ oneRecordId }}</p>
+        </div>
+        <div class="text-right">
+          <!-- Pass/Fail badge when showing results -->
+          <div *ngIf="showResults" class="result-badge" [class.result-badge-pass]="checkStatus === 'PASSED'"
+            [class.result-badge-fail]="checkStatus === 'FAILED'">
+            <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1">
+              {{ checkStatus === 'PASSED' ? 'verified' : 'cancel' }}
+            </span>
+            {{ checkStatus }}
+          </div>
+          <div *ngIf="!showResults" class="result-badge result-badge-pending">
+            <span class="material-symbols-outlined text-sm">pending</span> PENDING CHECK
+          </div>
+          <p class="text-[10px] text-slate-400 mt-1">{{ dgd.origin }} → {{ dgd.destination }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shipper / Consignee / Route -->
+    <div class="dgd-grid-3">
+      <div class="dgd-field-block">
+        <span class="dgd-label">Shipper</span>
+        <p class="dgd-value font-semibold">{{ dgd.shipper.name }}</p>
+        <p class="dgd-sub">{{ dgd.shipper.address }}</p>
+      </div>
+      <div class="dgd-field-block">
+        <span class="dgd-label">Consignee</span>
+        <p class="dgd-value font-semibold">{{ dgd.consignee.name }}</p>
+        <p class="dgd-sub">{{ dgd.consignee.address }}</p>
+      </div>
+      <div class="dgd-field-block">
+        <span class="dgd-label">Route</span>
+        <div class="flex items-center gap-2 mt-1">
+          <span class="route-chip">{{ dgd.origin }}</span>
+          <span class="material-symbols-outlined text-slate-400 text-sm">arrow_forward</span>
+          <span class="route-chip">{{ dgd.destination }}</span>
+        </div>
+        <div class="flex gap-4 mt-2">
+          <div><span class="dgd-label">Pieces</span><span class="dgd-value">{{ dgd.piece_quantity }}</span></div>
+          <div><span class="dgd-label">Gross Wt.</span><span class="dgd-value">{{ dgd.gross_weight }} {{ dgd.weight_unit
+              }}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DG Line Items Table -->
+    <div class="dgd-section-header">
+      <span class="material-symbols-outlined text-red-600 text-sm"
+        style="font-variation-settings:'FILL' 1">warning</span>
+      Dangerous Goods Information
+    </div>
+    <div class="overflow-x-auto">
+      <table class="dgd-table">
+        <thead>
+          <tr>
+            <th>UN Number</th>
+            <th>Proper Shipping Name</th>
+            <th>Class / Div</th>
+            <th>Pkg Grp</th>
+            <th>Packing Instruction</th>
+            <th>Quantity</th>
+            <th>Authorizations</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of dgd.dg_items">
+            <td><span class="un-badge">{{ item.un_number }}</span></td>
+            <td class="font-medium text-slate-800">{{ item.proper_shipping_name }}</td>
+            <td>
+              <span class="class-badge">{{ item.hazard_class }}</span>
+              <span *ngIf="item.subsidiary_risk" class="class-badge ml-1">{{ item.subsidiary_risk }}</span>
+            </td>
+            <td>{{ item.packing_group || '—' }}</td>
+            <td class="text-xs">{{ item.packing_instruction || '—' }}</td>
+            <td>{{ item.quantity }} {{ item.quantity_unit }}</td>
+            <td class="text-xs text-slate-500">{{ item.authorizations || '—' }}</td>
+          </tr>
+          <tr *ngIf="!dgd.dg_items || dgd.dg_items.length === 0">
+            <td colspan="7" class="text-center text-slate-400 py-4 text-sm italic">No DG items parsed from XSDG</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Emergency / Signatory -->
+    <div class="dgd-grid-2 mt-4">
+      <div class="dgd-field-block">
+        <span class="dgd-label">Emergency Contact</span>
+        <p class="dgd-value">{{ dgd.emergency_name }}</p>
+        <p class="text-sm font-mono text-red-700 font-bold">{{ dgd.emergency_phone }}</p>
+      </div>
+      <div class="dgd-field-block">
+        <span class="dgd-label">Declaration Signed by</span>
+        <p class="dgd-value">{{ dgd.signatory_name || '—' }}</p>
+        <p class="dgd-sub">Date: {{ dgd.signatory_date || 'See original document' }}</p>
+        <p *ngIf="showResults" class="text-[10px] text-emerald-600 font-semibold mt-1">
+          Verified {{ formattedCheckedAt }}
+        </p>
+      </div>
+    </div>
+  </div>
+</ng-template>
