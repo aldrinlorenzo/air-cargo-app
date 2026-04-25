@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService, AwbDashboardData, CheckResult, Piece, DangerousGood, Shipment, WaybillInfo } from '../../services/api.service';
 
 @Component({
   selector: 'app-dgr-compliance',
@@ -6,44 +7,123 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dgr-compliance.component.css']
 })
 export class DgrComplianceComponent implements OnInit {
-  
-  complianceResults = [
-    {
-      awb: '125-98342104',
-      route: 'LHR → DXB',
-      unNumber: 'UN 3480',
-      category: 'Class 9 (Li-ion)',
-      date: '2024-11-04 14:22',
-      status: 'ACCEPTED'
-    },
-    {
-      awb: '020-44910238',
-      route: 'FRA → SIN',
-      unNumber: 'UN 1993',
-      category: 'Class 3 (Flammable)',
-      date: '2024-11-04 13:05',
-      status: 'REJECTED'
-    },
-    {
-      awb: '618-55201934',
-      route: 'HKG → LAX',
-      unNumber: 'UN 3090',
-      category: 'Class 9 (Li-metal)',
-      date: '2024-11-04 11:48',
-      status: 'PENDING'
-    },
-    {
-      awb: '016-88320144',
-      route: 'JFK → CDG',
-      unNumber: 'UN 1072',
-      category: 'Class 2 (Oxidizing)',
-      date: '2024-11-04 10:15',
-      status: 'ACCEPTED'
-    }
-  ];
 
-  constructor() {}
+  // ── AWB input ──────────────────────────────────────────────────────────────
+  awbId = '123-45678903';
+  awbInputValue = '123-45678903';
+
+  // ── State ──────────────────────────────────────────────────────────────────
+  isLoading = false;
+  error: string | null = null;
+
+  // ── Parsed Data ────────────────────────────────────────────────────────────
+  dashboardData: AwbDashboardData | null = null;
+
+  // ── Derived / convenience getters ──────────────────────────────────────────
+  get masterWaybill(): WaybillInfo | null {
+    return this.dashboardData?.masterWaybill ?? null;
+  }
+
+  get houseWaybills(): WaybillInfo[] {
+    return this.dashboardData?.houseWaybills ?? [];
+  }
+
+  get shipments(): Shipment[] {
+    return this.dashboardData?.shipments ?? [];
+  }
+
+  get allPieces(): Piece[] {
+    return this.shipments.flatMap(s => s.pieces);
+  }
+
+  get allDangerousGoods(): DangerousGood[] {
+    return this.allPieces.flatMap(p => p.dangerousGoods);
+  }
+
+  get checks(): CheckResult[] {
+    return this.dashboardData?.checks ?? [];
+  }
+
+  get totalDgCount(): number {
+    return this.allDangerousGoods.length;
+  }
+
+  get failedChecksCount(): number {
+    return this.checks.filter(c =>
+      c.checkResult?.toUpperCase().includes('FAIL') ||
+      c.checkResult?.toUpperCase().includes('NOK') ||
+      c.checkResult?.toUpperCase().includes('REJECT')
+    ).length;
+  }
+
+  get passedChecksCount(): number {
+    return this.checks.filter(c =>
+      c.checkResult?.toUpperCase().includes('PASS') ||
+      c.checkResult?.toUpperCase().includes('OK') ||
+      c.checkResult?.toUpperCase().includes('ACCEPT')
+    ).length;
+  }
+
+  get totalPieceCount(): number {
+    return this.allPieces.length;
+  }
+
+  constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
+    this.loadAwbData();
+  }
+
+  loadAwbData(): void {
+    this.awbId = this.awbInputValue.trim();
+    if (!this.awbId) return;
+
+    this.isLoading = true;
+    this.error = null;
+    this.dashboardData = null;
+
+    this.apiService.getOneRecordAwb(this.awbId).subscribe({
+      next: (data) => {
+        this.dashboardData = data;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.error = err?.error?.detail ?? err?.message ?? 'Failed to fetch AWB data from ONE Record.';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  getCheckStatusClass(result: string | null): string {
+    const r = (result ?? '').toUpperCase();
+    if (r.includes('PASS') || r.includes('OK') || r.includes('ACCEPT')) {
+      return 'status-pass';
+    }
+    if (r.includes('FAIL') || r.includes('NOK') || r.includes('REJECT')) {
+      return 'status-fail';
+    }
+    return 'status-pending';
+  }
+
+  getCheckStatusLabel(result: string | null): string {
+    const r = (result ?? '').toUpperCase();
+    if (r.includes('PASS') || r.includes('OK') || r.includes('ACCEPT')) return 'PASS';
+    if (r.includes('FAIL') || r.includes('NOK') || r.includes('REJECT')) return 'FAIL';
+    if (result) return result;
+    return 'N/A';
+  }
+
+  formatId(id: string | null | undefined): string {
+    if (!id) return '—';
+    // Shorten long URIs to just the last segment
+    const parts = id.split('/');
+    return parts[parts.length - 1] || id;
+  }
+
+  /** Collect all DG declarations across all pieces */
+  get allDgDeclarations() {
+    return this.allPieces
+      .map(p => ({ ...p.dgDeclaration, pieceId: p.pieceId }))
+      .filter(d => d.declarationType || d.declarationDate || d.shipperSignature);
   }
 }

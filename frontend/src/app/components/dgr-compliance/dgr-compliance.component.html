@@ -5,8 +5,7 @@
         <span class="text-xl font-black tracking-tighter text-red-700 dark:text-red-500 font-headline">DG
             AutoLink</span>
     </div>
-    <nav class="hidden md:flex gap-8 font-headline tracking-tight font-bold text-sm">
-    </nav>
+    <nav class="hidden md:flex gap-8 font-headline tracking-tight font-bold text-sm"></nav>
     <div class="flex items-center gap-4">
         <button class="p-2 hover:bg-slate-100/50 rounded-full transition-colors">
             <span class="material-symbols-outlined text-slate-600">notifications</span>
@@ -15,14 +14,13 @@
             <span class="material-symbols-outlined text-slate-600">settings</span>
         </button>
         <img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant/20"
-            data-alt="professional portrait of a high-altitude cargo logistics coordinator in technical uniform, soft cinematic lighting, studio background"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPn9-h76O3kp8HDj7KFTdOitg_55G6mtfuTtuzWX3v7-oKc4uRenTHL0w3NEAgwVtoj8_gnZciIRCwevH4a0T8ADzmxHUBXLplTnZGKsokQsv08G_OSeuODQgn3W3DnSCRPBIyPIs72JwlCgobBTaD6DmEPs461RdDep7tybQX6MnOHzhnQU-0shHLPhhwo4on-llnb0hWt5pN8b_tb3cvtPvLk1MCRMDGuKTJqXdhelJIwzPQkcAkqUngv20Uzw3hDFDb0yIxQhRV" />
     </div>
 </header>
+
 <!-- SideNavBar -->
 <aside
     class="h-screen w-64 fixed left-0 top-0 pt-20 border-r border-transparent bg-slate-50 dark:bg-slate-950 flex flex-col gap-2 p-4 z-40 hidden md:flex">
-
     <nav class="space-y-1">
         <a class="flex items-center gap-3 px-3 py-2 bg-white dark:bg-slate-800 text-red-700 dark:text-red-400 shadow-sm rounded-md font-inter text-sm font-medium translate-x-1 duration-150 cursor-pointer"
             routerLink="/dgr-compliance">
@@ -32,14 +30,6 @@
             routerLink="/dg-shipment">
             <span class="material-symbols-outlined text-xl">local_shipping</span> DG Shipment
         </a>
-        <!-- <a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-500 font-inter text-sm font-medium hover:bg-red-50 dark:hover:bg-red-950/30 transition-all cursor-pointer"
-            routerLink="/dg-converter">
-            <span class="material-symbols-outlined text-xl">data_object</span> XML to JSON-LD Tool
-        </a>
-        <a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-500 font-inter text-sm font-medium hover:bg-red-50 dark:hover:bg-red-950/30 transition-all cursor-pointer"
-            routerLink="/json-converter">
-            <span class="material-symbols-outlined text-xl">data_array</span> JSON to JSON-LD Tool
-        </a> -->
     </nav>
     <div class="mt-auto flex flex-col gap-1 border-t border-slate-100 pt-4">
         <a
@@ -52,278 +42,352 @@
         </a>
     </div>
 </aside>
+
 <!-- Main Content -->
 <main class="md:ml-64 pt-20 px-8 pb-12">
+
     <!-- Dashboard Header -->
-    <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <div class="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-            <span class="text-xs font-bold uppercase tracking-widest text-secondary font-label">Compliance
-                Analytics</span>
-            <h1 class="text-4xl font-black font-headline tracking-tighter text-on-surface mt-1">IATA DGR Check Results
+            <span class="text-xs font-bold uppercase tracking-widest text-secondary font-label">ONE Record · Live
+                Data</span>
+            <h1 class="text-4xl font-black font-headline tracking-tighter text-on-surface mt-1">DGR Compliance Dashboard
             </h1>
         </div>
-        <!-- Filters -->
-        <div class="flex flex-wrap items-center gap-3">
-            <div
-                class="flex items-center bg-surface-container-low px-3 py-2 rounded-xl border-b border-outline-variant">
-                <span class="material-symbols-outlined text-lg text-slate-500 mr-2">calendar_today</span>
-                <select class="bg-transparent border-none text-xs font-semibold focus:ring-0 cursor-pointer">
-                    <option>Last 30 Days</option>
-                    <option>Current Quarter</option>
-                    <option>YTD Analytics</option>
-                </select>
-            </div>
-            <div
-                class="flex items-center bg-surface-container-low px-3 py-2 rounded-xl border-b border-outline-variant">
-                <span class="material-symbols-outlined text-lg text-slate-500 mr-2">public</span>
-                <select class="bg-transparent border-none text-xs font-semibold focus:ring-0 cursor-pointer">
-                    <option>All Regions</option>
-                    <option>EMEA</option>
-                    <option>APAC</option>
-                    <option>Americas</option>
-                </select>
-            </div>
-            <button
-                class="bg-surface-container-highest px-4 py-2 rounded-xl text-xs font-bold hover:bg-slate-200 transition-colors">
-                Export Report
-            </button>
-        </div>
     </div>
-    <!-- Bento Grid Charts -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8">
-        <!-- Compliance Trend Chart (Luzmo style) -->
-        <div
-            class="md:col-span-8 bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10 shadow-sm relative overflow-hidden animate-fade-in-up delay-100">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="font-headline font-bold text-lg text-on-surface">Compliance Trend</h3>
-                <div class="flex gap-4">
-                    <div class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-full bg-primary"></span>
-                        <span class="text-[10px] font-bold uppercase text-slate-500">Accepted</span>
-                    </div>
-                    <div class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-full bg-secondary"></span>
-                        <span class="text-[10px] font-bold uppercase text-slate-500">Rejected</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Mock Chart Visualization -->
-            <div class="h-64 flex items-end justify-between px-4 pb-4 border-b border-slate-100">
-                <div class="w-8 bg-secondary-fixed h-[40%] rounded-t-sm relative group">
-                    <div
-                        class="absolute -top-12 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                        72%</div>
-                </div>
-                <div class="w-8 bg-primary h-[65%] rounded-t-sm"></div>
-                <div class="w-8 bg-secondary-fixed h-[35%] rounded-t-sm"></div>
-                <div class="w-8 bg-primary h-[80%] rounded-t-sm"></div>
-                <div class="w-8 bg-secondary-fixed h-[50%] rounded-t-sm"></div>
-                <div class="w-8 bg-primary h-[75%] rounded-t-sm"></div>
-                <div class="w-8 bg-secondary-fixed h-[20%] rounded-t-sm"></div>
-                <div class="w-8 bg-primary h-[90%] rounded-t-sm"></div>
-                <div class="w-8 bg-secondary-fixed h-[45%] rounded-t-sm"></div>
-                <div class="w-8 bg-primary h-[70%] rounded-t-sm"></div>
-                <div class="w-8 bg-secondary-fixed h-[30%] rounded-t-sm"></div>
-                <div class="w-8 bg-primary h-[85%] rounded-t-sm"></div>
-            </div>
-            <div class="flex justify-between mt-3 px-2 text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                <span>Oct 01</span><span>Oct 07</span><span>Oct 14</span><span>Oct 21</span><span>Oct 28</span><span>Nov
-                    01</span>
-            </div>
-        </div>
-        <!-- Category Breakdown Chart (Circular) -->
-        <div
-            class="md:col-span-4 bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10 shadow-sm flex flex-col animate-fade-in-up delay-200">
-            <h3 class="font-headline font-bold text-lg text-on-surface mb-6">Category Breakdown</h3>
-            <div class="flex-1 flex flex-col items-center justify-center relative">
-                <svg class="w-40 h-40 -rotate-90">
-                    <circle cx="80" cy="80" fill="transparent" r="70" stroke="#edeeef" stroke-width="15"></circle>
-                    <circle cx="80" cy="80" fill="transparent" r="70" stroke="#7a001d" stroke-dasharray="440"
-                        stroke-dashoffset="120" stroke-linecap="round" stroke-width="15"></circle>
-                    <circle cx="80" cy="80" fill="transparent" r="70" stroke="#1c6583" stroke-dasharray="440"
-                        stroke-dashoffset="380" stroke-linecap="round" stroke-width="15"></circle>
-                </svg>
-                <div class="absolute flex flex-col items-center">
-                    <span class="text-3xl font-black font-headline text-on-surface">942</span>
-                    <span class="text-[10px] font-bold text-slate-500 uppercase">Total Checks</span>
-                </div>
-            </div>
-            <div class="mt-6 space-y-3">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-primary"></span>
-                        <span class="text-xs font-semibold">Lithium Batteries</span>
-                    </div>
-                    <span class="text-xs font-bold">64%</span>
-                </div>
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-secondary"></span>
-                        <span class="text-xs font-semibold">Flammable Liquids</span>
-                    </div>
-                    <span class="text-xs font-bold">22%</span>
-                </div>
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-tertiary"></span>
-                        <span class="text-xs font-semibold">Others</span>
-                    </div>
-                    <span class="text-xs font-bold">14%</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- DG AutoCheck Acceptance Results Table -->
+
+    <!-- AWB Search Bar -->
     <div
-        class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 shadow-sm overflow-hidden animate-fade-in-up delay-300">
-        <div class="p-6 border-b border-slate-50 flex items-center justify-between bg-surface-container-low">
-            <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-primary"
-                    style="font-variation-settings: 'FILL' 1;">fact_check</span>
-                <h3 class="font-headline font-bold text-lg text-on-surface">DG AutoCheck Acceptance Results</h3>
-            </div>
-            <div class="flex items-center gap-2">
-                <input
-                    class="text-xs bg-white border-outline-variant rounded-lg px-4 py-1.5 w-64 focus:ring-primary focus:border-primary"
-                    placeholder="Search manifest or AWB..." type="text" />
-            </div>
-        </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-slate-50/50">
-                        <th class="px-6 py-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">AWB
-                            Number</th>
-                        <th class="px-6 py-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">Origin
-                            / Dest</th>
-                        <th class="px-6 py-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">UN
-                            Number</th>
-                        <th class="px-6 py-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">DGR
-                            Category</th>
-                        <th class="px-6 py-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">Check
-                            Date</th>
-                        <th class="px-6 py-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">Status
-                        </th>
-                        <th class="px-6 py-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">Action
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100">
-                    <!-- Table Row 1 -->
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="px-6 py-4 text-xs font-bold text-primary">125-98342104</td>
-                        <td class="px-6 py-4 text-xs font-medium">LHR → DXB</td>
-                        <td class="px-6 py-4"><span
-                                class="bg-surface-container px-2 py-1 rounded text-[10px] font-mono font-bold">UN
-                                3480</span></td>
-                        <td class="px-6 py-4 text-xs">Class 9 (Li-ion)</td>
-                        <td class="px-6 py-4 text-xs text-slate-500">2024-11-04 14:22</td>
-                        <td class="px-6 py-4">
-                            <span
-                                class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-[10px] font-bold border border-emerald-100">ACCEPTED</span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <button class="text-secondary hover:text-primary transition-colors"><span
-                                    class="material-symbols-outlined text-lg">visibility</span></button>
-                        </td>
-                    </tr>
-                    <!-- Table Row 2 -->
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="px-6 py-4 text-xs font-bold text-primary">020-44910238</td>
-                        <td class="px-6 py-4 text-xs font-medium">FRA → SIN</td>
-                        <td class="px-6 py-4"><span
-                                class="bg-surface-container px-2 py-1 rounded text-[10px] font-mono font-bold">UN
-                                1993</span></td>
-                        <td class="px-6 py-4 text-xs">Class 3 (Flammable)</td>
-                        <td class="px-6 py-4 text-xs text-slate-500">2024-11-04 13:05</td>
-                        <td class="px-6 py-4">
-                            <span
-                                class="bg-red-50 text-red-700 px-3 py-1 rounded-full text-[10px] font-bold border border-red-100">REJECTED</span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <button class="text-secondary hover:text-primary transition-colors"><span
-                                    class="material-symbols-outlined text-lg">error_outline</span></button>
-                        </td>
-                    </tr>
-                    <!-- Table Row 3 -->
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="px-6 py-4 text-xs font-bold text-primary">618-55201934</td>
-                        <td class="px-6 py-4 text-xs font-medium">HKG → LAX</td>
-                        <td class="px-6 py-4"><span
-                                class="bg-surface-container px-2 py-1 rounded text-[10px] font-mono font-bold">UN
-                                3090</span></td>
-                        <td class="px-6 py-4 text-xs">Class 9 (Li-metal)</td>
-                        <td class="px-6 py-4 text-xs text-slate-500">2024-11-04 11:48</td>
-                        <td class="px-6 py-4">
-                            <span
-                                class="bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-[10px] font-bold border border-amber-100">PENDING</span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <button class="text-secondary hover:text-primary transition-colors"><span
-                                    class="material-symbols-outlined text-lg">hourglass_empty</span></button>
-                        </td>
-                    </tr>
-                    <!-- Table Row 4 -->
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="px-6 py-4 text-xs font-bold text-primary">016-88320144</td>
-                        <td class="px-6 py-4 text-xs font-medium">JFK → CDG</td>
-                        <td class="px-6 py-4"><span
-                                class="bg-surface-container px-2 py-1 rounded text-[10px] font-mono font-bold">UN
-                                1072</span></td>
-                        <td class="px-6 py-4 text-xs">Class 2 (Oxidizing)</td>
-                        <td class="px-6 py-4 text-xs text-slate-500">2024-11-04 10:15</td>
-                        <td class="px-6 py-4">
-                            <span
-                                class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-[10px] font-bold border border-emerald-100">ACCEPTED</span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <button class="text-secondary hover:text-primary transition-colors"><span
-                                    class="material-symbols-outlined text-lg">visibility</span></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
-            <p class="text-[10px] font-bold text-slate-500 uppercase">Showing 4 of 1,240 entries</p>
-            <div class="flex gap-2">
-                <button class="p-1 hover:bg-slate-200 rounded transition-colors text-slate-500"><span
-                        class="material-symbols-outlined">chevron_left</span></button>
-                <button class="p-1 hover:bg-slate-200 rounded transition-colors text-slate-500"><span
-                        class="material-symbols-outlined">chevron_right</span></button>
-            </div>
+        class="mb-8 flex items-center gap-3 bg-white border border-outline-variant/30 rounded-xl px-5 py-3 shadow-sm max-w-2xl">
+        <span class="material-symbols-outlined text-slate-400">search</span>
+        <input [(ngModel)]="awbInputValue" (keyup.enter)="loadAwbData()"
+            placeholder="Enter AWB number (e.g. 123-45678903)"
+            class="flex-1 bg-transparent border-none text-sm font-medium focus:outline-none text-on-surface placeholder-slate-300" />
+        <button (click)="loadAwbData()" [disabled]="isLoading"
+            class="bg-primary text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-red-800 transition-colors disabled:opacity-50">
+            {{ isLoading ? 'Loading...' : 'Search' }}
+        </button>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-24 gap-4">
+        <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <p class="text-sm font-medium text-slate-500">Fetching ONE Record data for <span
+                class="font-bold text-primary">{{ awbId }}</span>…</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="mb-8 bg-red-50 border border-red-200 rounded-xl p-6 flex items-start gap-4">
+        <span class="material-symbols-outlined text-red-600 text-2xl mt-0.5">error</span>
+        <div>
+            <h3 class="font-bold text-red-700 text-sm">Failed to load AWB data</h3>
+            <p class="text-xs text-red-600 mt-1">{{ error }}</p>
         </div>
     </div>
-    <!-- AI Insights Card (Special Component) -->
-    <section class="mt-8 bg-inverse-surface text-white p-8 rounded-xl shadow-2xl relative overflow-hidden">
-        <div
-            class="absolute top-0 right-0 w-64 h-64 bg-surface-tint opacity-10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl">
-        </div>
-        <div class="relative z-10 flex flex-col md:flex-row items-center gap-8">
-            <div class="p-4 bg-primary rounded-full ring-8 ring-primary/20">
-                <span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">bolt</span>
+
+    <!-- Dashboard Content (only when data is loaded) -->
+    <ng-container *ngIf="dashboardData && !isLoading">
+
+        <!-- Summary Stats Row -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-xl border border-outline-variant/20 shadow-sm p-5 flex flex-col gap-1">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">AWB Number</span>
+                <span class="text-lg font-black font-headline text-primary">{{ masterWaybill?.awbNumber ||
+                    formatId(masterWaybill?.id) }}</span>
+                <span class="text-[10px] text-slate-400">Master Waybill</span>
             </div>
-            <div class="flex-1">
-                <h2 class="text-2xl font-black font-headline tracking-tighter mb-2">Automated Risk Assessment</h2>
-                <p class="text-slate-400 text-sm max-w-2xl font-body leading-relaxed">
-                    Our AI engine detected a 14% increase in rejection rates for <span
-                        class="text-primary-fixed font-bold">Lithium Battery Part 965</span> shipments from the APAC
-                    region. Recommended action: Audit ground handler compliance at HKG and SIN terminals.
-                </p>
+            <div class="bg-white rounded-xl border border-outline-variant/20 shadow-sm p-5 flex flex-col gap-1">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">House AWBs</span>
+                <span class="text-3xl font-black font-headline text-on-surface">{{ houseWaybills.length }}</span>
+                <span class="text-[10px] text-slate-400">House waybills</span>
             </div>
-            <button
-                class="bg-white text-primary px-6 py-3 rounded-xl font-headline font-extrabold text-sm hover:bg-primary-fixed transition-colors whitespace-nowrap">
-                View Full Analysis
-            </button>
+            <div class="bg-white rounded-xl border border-outline-variant/20 shadow-sm p-5 flex flex-col gap-1">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">DG Items</span>
+                <span class="text-3xl font-black font-headline text-amber-600">{{ totalDgCount }}</span>
+                <span class="text-[10px] text-slate-400">Dangerous goods entries</span>
+            </div>
+            <div class="bg-white rounded-xl border border-outline-variant/20 shadow-sm p-5 flex flex-col gap-1">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Checks</span>
+                <span class="text-3xl font-black font-headline"
+                    [ngClass]="failedChecksCount > 0 ? 'text-red-600' : 'text-emerald-600'">
+                    {{ passedChecksCount }}<span class="text-slate-300 font-light">/</span>{{ checks.length }}
+                </span>
+                <span class="text-[10px] text-slate-400">Passed / Total</span>
+            </div>
         </div>
-    </section>
+
+        <!-- Waybill Master Card -->
+        <div class="bg-white rounded-xl border border-outline-variant/20 shadow-sm p-6 mb-6">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="material-symbols-outlined text-primary"
+                    style="font-variation-settings:'FILL' 1">article</span>
+                <h2 class="font-headline font-bold text-lg text-on-surface">Waybill Master</h2>
+                <span class="ml-auto text-[10px] font-mono bg-slate-100 px-2 py-1 rounded text-slate-500">{{
+                    masterWaybill?.type }}</span>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                <div>
+                    <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">AWB Number</p>
+                    <p class="font-semibold text-on-surface">{{ masterWaybill?.awbNumber || '—' }}</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">Prefix</p>
+                    <p class="font-semibold text-on-surface">{{ masterWaybill?.prefix || '—' }}</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">Carrier</p>
+                    <p class="font-semibold text-on-surface">{{ masterWaybill?.carrier || '—' }}</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">Origin</p>
+                    <p class="font-semibold text-on-surface">{{ masterWaybill?.origin || '—' }}</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">Destination</p>
+                    <p class="font-semibold text-on-surface">{{ masterWaybill?.destination || '—' }}</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">Object ID</p>
+                    <p class="font-mono text-xs text-slate-500 break-all">{{ formatId(masterWaybill?.id) }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- House Waybills -->
+        <div *ngIf="houseWaybills.length > 0"
+            class="bg-white rounded-xl border border-outline-variant/20 shadow-sm p-6 mb-6">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="material-symbols-outlined text-secondary"
+                    style="font-variation-settings:'FILL' 1">receipt_long</span>
+                <h2 class="font-headline font-bold text-lg text-on-surface">House Waybills</h2>
+                <span class="ml-2 bg-secondary/10 text-secondary text-[10px] font-bold px-2 py-0.5 rounded-full">{{
+                    houseWaybills.length }}</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50">
+                            <th class="px-4 py-3 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
+                                AWB Number</th>
+                            <th class="px-4 py-3 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
+                                Prefix</th>
+                            <th class="px-4 py-3 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
+                                Origin</th>
+                            <th class="px-4 py-3 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
+                                Destination</th>
+                            <th class="px-4 py-3 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
+                                Carrier</th>
+                            <th class="px-4 py-3 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">ID
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr *ngFor="let hwb of houseWaybills" class="hover:bg-slate-50 transition-colors">
+                            <td class="px-4 py-3 text-xs font-bold text-primary">{{ hwb.awbNumber || '—' }}</td>
+                            <td class="px-4 py-3 text-xs">{{ hwb.prefix || '—' }}</td>
+                            <td class="px-4 py-3 text-xs">{{ hwb.origin || '—' }}</td>
+                            <td class="px-4 py-3 text-xs">{{ hwb.destination || '—' }}</td>
+                            <td class="px-4 py-3 text-xs">{{ hwb.carrier || '—' }}</td>
+                            <td class="px-4 py-3 text-[10px] font-mono text-slate-400">{{ formatId(hwb.id) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Shipments -->
+        <div *ngFor="let shipment of shipments; let si = index"
+            class="bg-white rounded-xl border border-outline-variant/20 shadow-sm p-6 mb-6">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="material-symbols-outlined text-tertiary"
+                    style="font-variation-settings:'FILL' 1">inventory_2</span>
+                <h2 class="font-headline font-bold text-lg text-on-surface">Shipment {{ si + 1 }}</h2>
+                <span class="ml-auto text-[10px] font-mono text-slate-400">{{ formatId(shipment.shipmentId) }}</span>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-6">
+                <div>
+                    <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">Description</p>
+                    <p class="font-semibold text-on-surface">{{ shipment.description || '—' }}</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">Total Weight</p>
+                    <p class="font-semibold text-on-surface">{{ shipment.totalWeight || '—' }} {{ shipment.weightUnit ||
+                        '' }}</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">Pieces</p>
+                    <p class="font-semibold text-on-surface">{{ shipment.pieces.length }}</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">Commodity</p>
+                    <p class="font-semibold text-on-surface">{{ shipment.commodity || '—' }}</p>
+                </div>
+            </div>
+
+            <!-- Pieces -->
+            <div *ngFor="let piece of shipment.pieces; let pi = index"
+                class="mb-4 border border-slate-100 rounded-lg overflow-hidden">
+                <div class="bg-slate-50 px-4 py-2 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm text-slate-500">package_2</span>
+                    <span class="text-xs font-bold text-slate-600">Piece {{ pi + 1 }}</span>
+                    <span class="text-[10px] text-slate-400 ml-2">{{ piece.pieceDescription || '' }}</span>
+                    <span *ngIf="piece.weight"
+                        class="ml-auto text-[10px] font-mono bg-white border border-slate-200 px-2 py-0.5 rounded text-slate-500">
+                        {{ piece.weight }} {{ piece.weightUnit || '' }}
+                    </span>
+                </div>
+
+                <!-- DG Items -->
+                <div *ngIf="piece.dangerousGoods.length > 0" class="p-4">
+                    <p
+                        class="text-[10px] font-extrabold uppercase text-amber-600 tracking-widest mb-3 flex items-center gap-1">
+                        <span class="material-symbols-outlined text-sm"
+                            style="font-variation-settings:'FILL' 1">warning</span>
+                        Dangerous Goods ({{ piece.dangerousGoods.length }})
+                    </p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-amber-50">
+                                    <th
+                                        class="px-3 py-2 text-[10px] font-extrabold text-amber-700 uppercase tracking-widest">
+                                        UN #</th>
+                                    <th
+                                        class="px-3 py-2 text-[10px] font-extrabold text-amber-700 uppercase tracking-widest">
+                                        Proper Shipping Name</th>
+                                    <th
+                                        class="px-3 py-2 text-[10px] font-extrabold text-amber-700 uppercase tracking-widest">
+                                        Hazard Class</th>
+                                    <th
+                                        class="px-3 py-2 text-[10px] font-extrabold text-amber-700 uppercase tracking-widest">
+                                        Packing Group</th>
+                                    <th
+                                        class="px-3 py-2 text-[10px] font-extrabold text-amber-700 uppercase tracking-widest">
+                                        Quantity</th>
+                                    <th
+                                        class="px-3 py-2 text-[10px] font-extrabold text-amber-700 uppercase tracking-widest">
+                                        Packing Instr.</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-amber-50">
+                                <tr *ngFor="let dg of piece.dangerousGoods"
+                                    class="hover:bg-amber-50/50 transition-colors">
+                                    <td class="px-3 py-2">
+                                        <span
+                                            class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[10px] font-mono font-bold">{{
+                                            dg.unNumber || '—' }}</span>
+                                    </td>
+                                    <td class="px-3 py-2 text-xs font-medium">{{ dg.properShippingName || '—' }}</td>
+                                    <td class="px-3 py-2 text-xs">{{ dg.hazardClass || '—' }}</td>
+                                    <td class="px-3 py-2 text-xs">{{ dg.packingGroup || '—' }}</td>
+                                    <td class="px-3 py-2 text-xs">{{ dg.quantity || '—' }} {{ dg.unit || '' }}</td>
+                                    <td class="px-3 py-2 text-xs font-mono">{{ dg.packingInstruction || '—' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div *ngIf="piece.dangerousGoods.length === 0" class="px-4 py-3 text-xs text-slate-400 italic">
+                    No dangerous goods entries on this piece.
+                </div>
+
+                <!-- DG Declaration -->
+                <div *ngIf="piece.dgDeclaration?.declarationType || piece.dgDeclaration?.declarationDate || piece.dgDeclaration?.shipperSignature"
+                    class="border-t border-slate-100 bg-slate-50/50 px-4 py-3">
+                    <p class="text-[10px] font-extrabold uppercase text-slate-500 tracking-widest mb-2">DG Declaration
+                    </p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                        <div>
+                            <p class="text-[10px] text-slate-400 mb-0.5">Type</p>
+                            <p class="font-semibold">{{ piece.dgDeclaration.declarationType || '—' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-slate-400 mb-0.5">Date</p>
+                            <p class="font-semibold">{{ piece.dgDeclaration.declarationDate || '—' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-slate-400 mb-0.5">Shipper Signature</p>
+                            <p class="font-semibold">{{ piece.dgDeclaration.shipperSignature || '—' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-slate-400 mb-0.5">Compliance Method</p>
+                            <p class="font-semibold">{{ piece.dgDeclaration.complianceMethod || '—' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checks Table (Waybill Master > Check) -->
+        <div class="bg-white rounded-xl border border-outline-variant/20 shadow-sm overflow-hidden mb-8">
+            <div class="p-5 border-b border-slate-50 flex items-center gap-3 bg-surface-container-low">
+                <span class="material-symbols-outlined text-primary"
+                    style="font-variation-settings:'FILL' 1">fact_check</span>
+                <h2 class="font-headline font-bold text-lg text-on-surface">Check Results</h2>
+                <span class="ml-2 text-[10px] font-bold bg-primary/10 text-primary px-2 py-0.5 rounded-full">{{
+                    checks.length }} checks</span>
+            </div>
+
+            <div *ngIf="checks.length === 0" class="px-6 py-10 text-center text-sm text-slate-400 italic">
+                No check records found on this waybill.
+            </div>
+
+            <div *ngIf="checks.length > 0" class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50/50">
+                            <th class="px-6 py-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
+                                Check Type</th>
+                            <th class="px-6 py-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
+                                Result</th>
+                            <th class="px-6 py-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
+                                Date</th>
+                            <th class="px-6 py-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
+                                Checked By</th>
+                            <th class="px-6 py-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
+                                Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr *ngFor="let check of checks" class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-4 text-xs font-semibold">{{ check.checkType || '—' }}</td>
+                            <td class="px-6 py-4">
+                                <span [ngClass]="{
+                  'bg-emerald-50 text-emerald-700 border-emerald-100': getCheckStatusClass(check.checkResult) === 'status-pass',
+                  'bg-red-50 text-red-700 border-red-100': getCheckStatusClass(check.checkResult) === 'status-fail',
+                  'bg-amber-50 text-amber-700 border-amber-100': getCheckStatusClass(check.checkResult) === 'status-pending'
+                }" class="px-3 py-1 rounded-full text-[10px] font-bold border">
+                                    {{ getCheckStatusLabel(check.checkResult) }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-xs text-slate-500">{{ check.checkDate || '—' }}</td>
+                            <td class="px-6 py-4 text-xs">{{ check.checkedBy || '—' }}</td>
+                            <td class="px-6 py-4 text-xs text-slate-500">{{ check.remarks || '—' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Empty state when no shipments and no checks -->
+        <div *ngIf="shipments.length === 0 && checks.length === 0 && houseWaybills.length === 0"
+            class="text-center py-16">
+            <span class="material-symbols-outlined text-5xl text-slate-300 mb-4 block">inventory</span>
+            <p class="text-slate-400 text-sm font-medium">No nested shipment, piece, or check data found in this AWB
+                object.</p>
+            <p class="text-slate-300 text-xs mt-1">The ONE Record object may be partially populated or use different
+                property names.</p>
+        </div>
+
+    </ng-container>
+
 </main>
+
 <!-- Footer -->
 <footer class="w-full py-8 mt-auto border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
     <div class="flex flex-col md:flex-row justify-between items-center px-12 md:ml-64 gap-6">
         <div class="text-center md:text-left flex flex-col items-center md:items-start gap-2">
             <img src="assets/logo.png" alt="A1R Cargo Rangers Logo" class="h-12 w-auto object-contain">
-
             <p class="text-[10px] text-slate-400">Made with ❤️ by A1R Cargo Rangers. The source code is available in
                 Github.</p>
         </div>
