@@ -5,7 +5,16 @@
         <img src="assets/skyler.png" alt="Skyler" class="h-8 w-auto object-contain">
         <span class="text-xl font-black tracking-tighter text-red-700 dark:text-red-500 font-headline">Skyler</span>
     </div>
-    <nav class="hidden md:flex gap-8 font-headline tracking-tight font-bold text-sm"></nav>
+    <nav class="hidden md:flex gap-6 font-headline tracking-tight font-bold text-sm">
+        <a routerLink="/dgr-compliance"
+            class="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-700 rounded-lg text-sm font-semibold transition-all cursor-pointer">
+            <span class="material-symbols-outlined text-base">dashboard</span> DG Shipment
+        </a>
+        <a routerLink="/dg-shipment"
+            class="flex items-center gap-1.5 px-3 py-1.5 text-slate-500 hover:text-red-700 hover:bg-red-50 rounded-lg text-sm font-semibold transition-all cursor-pointer">
+            <span class="material-symbols-outlined text-base">local_shipping</span> DGD Check
+        </a>
+    </nav>
     <div class="flex items-center gap-4">
         <button class="p-2 hover:bg-slate-100/50 rounded-full transition-colors">
             <span class="material-symbols-outlined text-slate-600">notifications</span>
@@ -18,33 +27,9 @@
     </div>
 </header>
 
-<!-- SideNavBar -->
-<aside
-    class="h-screen w-64 fixed left-0 top-0 pt-20 border-r border-transparent bg-slate-50 dark:bg-slate-950 flex flex-col gap-2 p-4 z-40 hidden md:flex">
-    <nav class="space-y-1">
-        <a class="flex items-center gap-3 px-3 py-2 bg-white dark:bg-slate-800 text-red-700 dark:text-red-400 shadow-sm rounded-md font-inter text-sm font-medium translate-x-1 duration-150 cursor-pointer"
-            routerLink="/dgr-compliance">
-            <span class="material-symbols-outlined text-xl">dashboard</span> DG Shipment
-        </a>
-        <a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-500 font-inter text-sm font-medium hover:bg-red-50 dark:hover:bg-red-950/30 transition-all cursor-pointer"
-            routerLink="/dg-shipment">
-            <span class="material-symbols-outlined text-xl">local_shipping</span> DGD Check
-        </a>
-    </nav>
-    <div class="mt-auto flex flex-col gap-1 border-t border-slate-100 pt-4">
-        <a
-            class="flex items-center gap-3 px-3 py-2 text-slate-500 font-inter text-sm hover:text-red-600 cursor-pointer">
-            <span class="material-symbols-outlined text-lg">headset_mic</span> Support
-        </a>
-        <a
-            class="flex items-center gap-3 px-3 py-2 text-slate-500 font-inter text-sm hover:text-red-600 cursor-pointer">
-            <span class="material-symbols-outlined text-lg">terminal</span> Logs
-        </a>
-    </div>
-</aside>
 
 <!-- Main Content -->
-<main class="md:ml-64 pt-20 px-8 pb-12">
+<main class="pt-20 px-8 pb-12 max-w-6xl mx-auto">
 
     <!-- Dashboard Header -->
     <div class="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -71,7 +56,12 @@
 
     <!-- Loading State -->
     <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-24 gap-4">
-        <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <svg class="w-12 h-12 animate-spin text-primary" viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="10"/>
+            <path d="M50 40 C50 40 42 20 30 10 A45 45 0 0 1 70 10 C58 20 50 40 50 40Z"/>
+            <path d="M43 47 C43 47 22 44 8 50 A45 45 0 0 1 30 85 C32 70 43 47 43 47Z"/>
+            <path d="M57 47 C57 47 78 44 92 50 A45 45 0 0 1 70 85 C68 70 57 47 57 47Z"/>
+        </svg>
         <p class="text-sm font-medium text-slate-500">Fetching ONE Record data for <span
                 class="font-bold text-primary">{{ awbId }}</span>…</p>
     </div>
@@ -385,7 +375,7 @@
 
 <!-- Footer -->
 <footer class="w-full py-8 mt-auto border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
-    <div class="flex flex-col md:flex-row justify-between items-center px-12 md:ml-64 gap-6">
+    <div class="flex flex-col md:flex-row justify-between items-center px-12 max-w-6xl mx-auto gap-6">
         <div class="text-center md:text-left flex flex-col items-center md:items-start gap-2">
             <img src="assets/logo.png" alt="A1R Cargo Rangers Logo" class="h-12 w-auto object-contain">
             <p class="text-[10px] text-slate-400">Made with ❤️ by A1R Cargo Rangers. The source code is available in
