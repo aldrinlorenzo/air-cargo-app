@@ -10,6 +10,19 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
+
+  convertToReadableJson(rawXml: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/dg/read`, rawXml, {
+      headers: { 'Content-Type': 'text/xml' }
+    });
+  }
+
+  convertXmlToJson(rawXml: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/dg/convert`, rawXml, {
+      headers: { 'Content-Type': 'text/xml' }
+    });
+  }
+
   getDashboardStats(): Observable<any> {
     return this.http.get(`${this.baseUrl}/dashboard/stats`);
   }
