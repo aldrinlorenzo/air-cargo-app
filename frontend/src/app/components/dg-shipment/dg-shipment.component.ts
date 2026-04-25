@@ -80,7 +80,7 @@ export class DgShipmentComponent {
     { id: 5, label: 'Verify', icon: 'verified', desc: 'Final DGD' },
   ];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // ── File handling ─────────────────────────────────────────────────────────
   onDragOver(e: DragEvent) { e.preventDefault(); this.isDragging = true; }

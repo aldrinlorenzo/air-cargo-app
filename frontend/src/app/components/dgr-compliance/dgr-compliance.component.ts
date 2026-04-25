@@ -68,7 +68,7 @@ export class DgrComplianceComponent implements OnInit {
     return this.allPieces.length;
   }
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
   }

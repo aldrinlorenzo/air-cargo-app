@@ -7,8 +7,8 @@ import { DgShipmentComponent } from './components/dg-shipment/dg-shipment.compon
 
 const routes: Routes = [
   { path: '', redirectTo: '/dg-shipment', pathMatch: 'full' },
-  { path: 'dgr-compliance', component: DgrComplianceComponent },
-  { path: 'dg-shipment', component: DgShipmentComponent },
+  { path: 'dg-shipment', component: DgrComplianceComponent },
+  { path: 'dgd-check', component: DgShipmentComponent },
   { path: 'dg-converter', component: DgConverterComponent },
   { path: 'json-converter', component: JsonConverterComponent }
 ];
