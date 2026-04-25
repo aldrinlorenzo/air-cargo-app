@@ -19,22 +19,14 @@
 <aside
   class="h-screen w-64 fixed left-0 top-0 pt-20 border-r border-slate-100 flex flex-col gap-2 p-4 bg-slate-50 z-40">
   <nav class="flex flex-col gap-1">
-    <!-- <a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-red-50 transition-all rounded-md font-medium text-sm cursor-pointer"
+    <a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-red-50 transition-all rounded-md font-medium text-sm cursor-pointer"
       routerLink="/dgr-compliance">
       <span class="material-symbols-outlined">dashboard</span> Dashboard
-    </a> -->
+    </a>
     <a class="flex items-center gap-3 px-3 py-2 bg-white text-red-700 shadow-sm rounded-md font-medium text-sm translate-x-1 cursor-pointer"
       routerLink="/dg-shipment">
       <span class="material-symbols-outlined">local_shipping</span> DG Shipment
     </a>
-    <!-- <a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-red-50 transition-all rounded-md font-medium text-sm cursor-pointer"
-      routerLink="/dg-converter">
-      <span class="material-symbols-outlined">data_object</span> XML to JSON-LD Tool
-    </a>
-    <a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-red-50 transition-all rounded-md font-medium text-sm cursor-pointer"
-      routerLink="/json-converter">
-      <span class="material-symbols-outlined">data_array</span> JSON to JSON-LD Tool
-    </a> -->
   </nav>
   <div class="mt-auto flex flex-col gap-1 border-t border-slate-200 pt-4">
     <a
@@ -67,11 +59,11 @@
           <span *ngIf="!isStepCompleted(step.id)" class="material-symbols-outlined text-sm">{{ step.icon }}</span>
           <span *ngIf="isStepCompleted(step.id)" class="material-symbols-outlined text-sm">check</span>
         </div>
-        <span class="text-[10px] font-bold mt-1 uppercase tracking-wider" [class.text-red-700]="isStepActive(step.id)"
+        <!-- <span class="text-[10px] font-bold mt-1 uppercase tracking-wider" [class.text-red-700]="isStepActive(step.id)"
           [class.text-emerald-600]="isStepCompleted(step.id)"
           [class.text-slate-400]="!isStepActive(step.id) && !isStepCompleted(step.id)">
           {{ step.label }}
-        </span>
+        </span> -->
         <span class="text-[9px] text-slate-400">{{ step.desc }}</span>
       </div>
       <div *ngIf="i < steps.length - 1" class="step-connector" [class.step-connector-done]="isStepCompleted(step.id)">

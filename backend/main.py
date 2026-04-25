@@ -20,7 +20,7 @@ app.add_middleware(
 class JSONPayload(BaseModel):
     json_data: str
 
-@app.post("/api/convert")
+@app.post("/api/dg/create")
 async def convert_xml_to_json(request: Request):
     """
     Accepts raw XML string directly in the body.
