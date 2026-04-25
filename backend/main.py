@@ -173,3 +173,7 @@ def get_uld_status():
 def ai_endpoint(data: RequestData):
     result = run_ai(data.text)
     return {"result": result}
+
+@app.get("/token")
+def get_token():
+    return {"token": "123"}

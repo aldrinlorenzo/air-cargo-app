@@ -9,8 +9,8 @@ import { ApiService, AwbDashboardData, CheckResult, Piece, DangerousGood, Shipme
 export class DgrComplianceComponent implements OnInit {
 
   // ── AWB input ──────────────────────────────────────────────────────────────
-  awbId = '123-45678903';
-  awbInputValue = '123-45678903';
+  awbId = '';
+  awbInputValue = '';
 
   // ── State ──────────────────────────────────────────────────────────────────
   isLoading = false;
@@ -71,7 +71,6 @@ export class DgrComplianceComponent implements OnInit {
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
-    this.loadAwbData();
   }
 
   loadAwbData(): void {

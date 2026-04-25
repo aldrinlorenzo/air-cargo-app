@@ -2,3 +2,5 @@ fastapi
 uvicorn
 pydantic
 xmltodict
+google.generativeai
+python-dotenv
