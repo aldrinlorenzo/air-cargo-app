@@ -21,6 +21,7 @@ export class DgrComplianceComponent implements OnInit {
   // ── State ──────────────────────────────────────────────────────────────────
   isLoading = false;
   error: string | null = null;
+  notFound = false;
 
   // ── Accordion state ────────────────────────────────────────────────────────
   expandedChecks = new Set<number>();
@@ -93,6 +94,7 @@ export class DgrComplianceComponent implements OnInit {
 
     this.isLoading = true;
     this.error = null;
+    this.notFound = false;
     this.dashboardData = null;
     this.expandedChecks.clear();
 
@@ -104,7 +106,13 @@ export class DgrComplianceComponent implements OnInit {
         this.chatbotService.updateAwbContext(data);
       },
       error: (err) => {
-        this.error = err?.error?.detail ?? err?.message ?? 'Failed to fetch AWB data from ONE Record.';
+        const status = err?.status;
+        if (status === 404 || status === 400) {
+          this.notFound = true;
+          this.error = null;
+        } else {
+          this.error = err?.error?.detail ?? err?.message ?? 'Failed to fetch AWB data from ONE Record.';
+        }
         this.isLoading = false;
         this.chatbotService.clearAwbContext();
       }

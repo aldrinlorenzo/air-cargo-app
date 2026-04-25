@@ -73,7 +73,7 @@
     </div>
 
     <!-- Empty State (no AWB searched yet) -->
-    <div *ngIf="!dashboardData && !isLoading && !error"
+    <div *ngIf="!dashboardData && !isLoading && !error && !notFound"
         class="flex flex-col items-center justify-center py-24 gap-6 animate-fade-in-up">
         <img src="assets/skyler.png" alt="Skyler" class="h-32 w-auto object-contain opacity-30">
         <div class="text-center">
@@ -96,8 +96,31 @@
                 class="font-bold text-primary">{{ awbId }}</span>…</p>
     </div>
 
+    <!-- Not Found State -->
+    <div *ngIf="notFound && !isLoading"
+        class="flex flex-col items-center justify-center py-20 gap-5 animate-fade-in-up">
+        <div
+            class="w-20 h-20 rounded-full bg-amber-50 flex items-center justify-center border-2 border-amber-100">
+            <span class="material-symbols-outlined text-4xl text-amber-400"
+                style="font-variation-settings:'FILL' 1">search_off</span>
+        </div>
+        <div class="text-center max-w-md">
+            <h2 class="text-lg font-bold text-slate-700 tracking-tight">No DG Shipment Found</h2>
+            <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                No DG shipment was found with AWB
+                <span class="font-bold text-slate-600">{{ awbId }}</span>.
+                Please verify the AWB number and try again.
+            </p>
+        </div>
+        <button (click)="awbInputValue = ''; notFound = false"
+            class="mt-2 flex items-center gap-2 bg-white border border-slate-200 text-slate-600 px-5 py-2 rounded-lg text-xs font-semibold hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm">
+            <span class="material-symbols-outlined text-sm">refresh</span>
+            Try another AWB
+        </button>
+    </div>
+
     <!-- Error State -->
-    <div *ngIf="error && !isLoading" class="mb-8 bg-red-50 border border-red-200 rounded-xl p-6 flex items-start gap-4">
+    <div *ngIf="error && !isLoading && !notFound" class="mb-8 bg-red-50 border border-red-200 rounded-xl p-6 flex items-start gap-4">
         <span class="material-symbols-outlined text-red-600 text-2xl mt-0.5">error</span>
         <div>
             <h3 class="font-bold text-red-700 text-sm">Failed to load AWB data</h3>
