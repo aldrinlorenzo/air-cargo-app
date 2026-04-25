@@ -111,7 +111,18 @@ export class ApiService {
       'Content-Type': 'application/x-www-form-urlencoded'
     });
 
-    return this.http.post<any>(this.authUrl, body.toString(), { headers });
+
+    // this.http.post('/token', body.toString(), { headers }).subscribe({
+    //   next: (res) => {
+    //     console.log(res);
+    //   },
+    //   error: (err) => {
+    //     this.isLoading = false;
+    //     this.errorMessage = `Update failed: ${err?.error?.detail || err.message}`;
+    //   }
+    // });
+
+    return this.http.post<any>('/token', body.toString(), { headers });
   }
 
   // 2. Method to get data using the token
