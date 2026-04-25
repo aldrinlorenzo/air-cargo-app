@@ -4,3 +4,4 @@ pydantic
 xmltodict
 google.generativeai
 python-dotenv
+httpx
