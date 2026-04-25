@@ -6,6 +6,21 @@
     </linearGradient>
   </defs>
   <rect width="64" height="64" rx="14" fill="url(#bg)"/>
-  <text x="32" y="44" text-anchor="middle" font-family="Arial,sans-serif" font-weight="900" font-size="32" fill="white">S</text>
-  <path d="M14 18 L28 22 L22 16 L32 20 L26 14 L38 18" stroke="#87CEEB" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- Simplified airplane silhouette inspired by Skyler mascot -->
+  <g transform="translate(32,32)">
+    <!-- Fuselage -->
+    <ellipse cx="0" cy="0" rx="18" ry="7" fill="white" opacity="0.95"/>
+    <!-- Wing -->
+    <path d="M-4,-6 L2,-18 L8,-18 L4,-6Z" fill="white" opacity="0.85"/>
+    <!-- Tail fin -->
+    <path d="M-14,-4 L-18,-14 L-12,-14 L-10,-4Z" fill="#87CEEB" opacity="0.9"/>
+    <!-- Tail wing -->
+    <path d="M-14,4 L-18,10 L-12,10 L-10,4Z" fill="white" opacity="0.7"/>
+    <!-- Engine -->
+    <circle cx="6" cy="6" r="3" fill="white" opacity="0.6"/>
+    <!-- Cockpit window -->
+    <ellipse cx="12" cy="-1" rx="4" ry="3" fill="#87CEEB" opacity="0.9"/>
+    <!-- Nose highlight -->
+    <ellipse cx="16" cy="0" rx="2" ry="4" fill="white" opacity="0.5"/>
+  </g>
 </svg>

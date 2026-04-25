@@ -1,6 +1,9 @@
 <!-- Top Navigation -->
 <nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-xl shadow-sm flex justify-between items-center px-8 h-16">
-  <div class="flex items-center gap-8">
+  <div class="flex items-center gap-3">
+    <button (click)="toggleSidebar()" class="p-1.5 hover:bg-slate-100 rounded-lg transition-colors">
+      <span class="material-symbols-outlined text-slate-600">{{ sidebarCollapsed ? 'menu' : 'menu_open' }}</span>
+    </button>
     <img src="assets/skyler.png" alt="Skyler" class="h-8 w-auto object-contain">
     <span class="text-xl font-black tracking-tighter text-red-700">Skyler</span>
   </div>
@@ -18,27 +21,32 @@
 
 <!-- Side Navigation -->
 <aside
-  class="h-screen w-64 fixed left-0 top-0 pt-20 border-r border-slate-100 flex flex-col gap-2 p-4 bg-slate-50 z-40">
+  class="h-screen fixed left-0 top-0 pt-20 border-r border-slate-100 flex flex-col gap-2 p-4 bg-slate-50 z-40 transition-all duration-300"
+  [style.width]="sidebarCollapsed ? '72px' : '256px'">
   <nav class="flex flex-col gap-1">
     <a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-red-50 transition-all rounded-md font-medium text-sm cursor-pointer"
-      routerLink="/dg-shipment">
-      <span class="material-symbols-outlined">dashboard</span> Dashboard
+      [class.justify-center]="sidebarCollapsed" routerLink="/dg-shipment">
+      <span class="material-symbols-outlined">deployed_code</span>
+      <span *ngIf="!sidebarCollapsed">DG Shipment</span>
     </a>
-    <a class="flex items-center gap-3 px-3 py-2 bg-white text-red-700 shadow-sm rounded-md font-medium text-sm translate-x-1 cursor-pointer"
-      routerLink="/dg-shipment">
-      <span class="material-symbols-outlined">local_shipping</span> DG Shipment
+    <a class="flex items-center gap-3 px-3 py-2 bg-white text-red-700 shadow-sm rounded-md font-medium text-sm transition-all cursor-pointer"
+      [class.translate-x-1]="!sidebarCollapsed" [class.justify-center]="sidebarCollapsed" routerLink="/dg-shipment">
+      <span class="material-symbols-outlined">fact_check</span>
+      <span *ngIf="!sidebarCollapsed">DGD Check</span>
     </a>
   </nav>
   <div class="mt-auto flex flex-col gap-1 border-t border-slate-200 pt-4">
-    <a
-      class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-red-50 text-xs uppercase tracking-wide cursor-pointer">
-      <span class="material-symbols-outlined text-sm">headset_mic</span> Support
+    <a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-red-50 text-xs uppercase tracking-wide cursor-pointer"
+      [class.justify-center]="sidebarCollapsed">
+      <span class="material-symbols-outlined text-sm">headset_mic</span>
+      <span *ngIf="!sidebarCollapsed">Support</span>
     </a>
   </div>
 </aside>
 
 <!-- Main Content -->
-<main class="ml-64 pt-24 px-10 pb-12 min-h-screen bg-slate-50">
+<main class="pt-24 px-10 pb-12 min-h-screen bg-slate-50 transition-all duration-300"
+  [style.margin-left]="sidebarCollapsed ? '72px' : '256px'">
 
   <!-- Page Header -->
   <header class="mb-8">
@@ -291,7 +299,8 @@
 </main>
 
 <!-- Footer -->
-<footer class="w-full py-8 border-t border-slate-200 bg-slate-50 ml-64">
+<footer class="w-full py-8 border-t border-slate-200 bg-slate-50 transition-all duration-300"
+  [style.margin-left]="sidebarCollapsed ? '72px' : '256px'">
   <div class="flex flex-col md:flex-row justify-between items-center px-12 gap-4">
     <div class="flex flex-col items-start gap-1">
       <img src="assets/logo.png" alt="A1R Cargo Rangers Logo" class="h-10 w-auto object-contain">

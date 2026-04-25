@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService, AwbDashboardData, CheckResult, Piece, DangerousGood, Shipment, WaybillInfo } from '../../services/api.service';
+import { ApiService, AwbDashboardData, CheckResult, SubCheck, Piece, DangerousGood, Shipment, WaybillInfo } from '../../services/api.service';
 
 @Component({
   selector: 'app-dgr-compliance',
@@ -8,6 +8,11 @@ import { ApiService, AwbDashboardData, CheckResult, Piece, DangerousGood, Shipme
 })
 export class DgrComplianceComponent implements OnInit {
 
+  // ── Sidebar ────────────────────────────────────────────────────────────────
+  sidebarCollapsed = false;
+
+  toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; }
+
   // ── AWB input ──────────────────────────────────────────────────────────────
   awbId = '';
   awbInputValue = '';
@@ -15,6 +20,9 @@ export class DgrComplianceComponent implements OnInit {
   // ── State ──────────────────────────────────────────────────────────────────
   isLoading = false;
   error: string | null = null;
+
+  // ── Accordion state ────────────────────────────────────────────────────────
+  expandedChecks = new Set<number>();
 
   // ── Parsed Data ────────────────────────────────────────────────────────────
   dashboardData: AwbDashboardData | null = null;
@@ -46,6 +54,11 @@ export class DgrComplianceComponent implements OnInit {
 
   get totalDgCount(): number {
     return this.allDangerousGoods.length;
+  }
+
+  /** All sub-checks across all parent checks (for counting) */
+  get allSubChecks(): SubCheck[] {
+    return this.checks.flatMap(c => c.subChecks ?? []);
   }
 
   get failedChecksCount(): number {
@@ -80,6 +93,7 @@ export class DgrComplianceComponent implements OnInit {
     this.isLoading = true;
     this.error = null;
     this.dashboardData = null;
+    this.expandedChecks.clear();
 
     this.apiService.getOneRecordAwb(this.awbId).subscribe({
       next: (data) => {
@@ -91,6 +105,18 @@ export class DgrComplianceComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  toggleCheck(index: number): void {
+    if (this.expandedChecks.has(index)) {
+      this.expandedChecks.delete(index);
+    } else {
+      this.expandedChecks.add(index);
+    }
+  }
+
+  isCheckExpanded(index: number): boolean {
+    return this.expandedChecks.has(index);
   }
 
   getCheckStatusClass(result: string | null): string {
@@ -119,10 +145,10 @@ export class DgrComplianceComponent implements OnInit {
     return parts[parts.length - 1] || id;
   }
 
-  /** Collect all DG declarations across all pieces */
+  /** Collect all DG declarations across all shipments */
   get allDgDeclarations() {
-    return this.allPieces
-      .map(p => ({ ...p.dgDeclaration, pieceId: p.pieceId }))
+    return this.shipments
+      .map(s => ({ ...s.dgDeclaration, shipmentId: s.shipmentId }))
       .filter(d => d.declarationType || d.declarationDate || d.shipperSignature);
   }
 }

@@ -52,6 +52,11 @@ export type StepId = 1 | 2 | 3 | 4 | 5;
 export class DgShipmentComponent {
   @ViewChild('fileInput') fileInput!: ElementRef;
 
+  // ── Sidebar ───────────────────────────────────────────────────────────────
+  sidebarCollapsed = false;
+
+  toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; }
+
   // ── State ─────────────────────────────────────────────────────────────────
   currentStep: StepId = 1;
   isDragging = false;

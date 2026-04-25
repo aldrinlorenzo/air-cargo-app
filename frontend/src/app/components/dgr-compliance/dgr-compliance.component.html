@@ -1,35 +1,52 @@
-<!-- TopNavBar -->
-<header
-    class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl flex justify-between items-center px-8 h-16 shadow-sm">
-    <div class="flex items-center gap-2">
+<!-- Top Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-xl shadow-sm flex justify-between items-center px-8 h-16">
+    <div class="flex items-center gap-3">
+        <button (click)="toggleSidebar()" class="p-1.5 hover:bg-slate-100 rounded-lg transition-colors">
+            <span class="material-symbols-outlined text-slate-600">{{ sidebarCollapsed ? 'menu' : 'menu_open' }}</span>
+        </button>
         <img src="assets/skyler.png" alt="Skyler" class="h-8 w-auto object-contain">
-        <span class="text-xl font-black tracking-tighter text-red-700 dark:text-red-500 font-headline">SKYLER</span>
+        <span class="text-xl font-black tracking-tighter text-red-700">Skyler</span>
     </div>
-    <nav class="hidden md:flex gap-6 font-headline tracking-tight font-bold text-sm">
-        <a routerLink="/dg-shipment"
-            class="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-700 rounded-lg text-sm font-semibold transition-all cursor-pointer">
-            <span class="material-symbols-outlined text-base">dashboard</span> DG Shipment
-        </a>
-        <a routerLink="/dgd-check"
-            class="flex items-center gap-1.5 px-3 py-1.5 text-slate-500 hover:text-red-700 hover:bg-red-50 rounded-lg text-sm font-semibold transition-all cursor-pointer">
-            <span class="material-symbols-outlined text-base">local_shipping</span> DGD Check
-        </a>
-    </nav>
     <div class="flex items-center gap-4">
-        <button class="p-2 hover:bg-slate-100/50 rounded-full transition-colors">
+        <button class="p-2 hover:bg-slate-100 rounded-full transition-colors">
             <span class="material-symbols-outlined text-slate-600">notifications</span>
         </button>
-        <button class="p-2 hover:bg-slate-100/50 rounded-full transition-colors">
+        <button class="p-2 hover:bg-slate-100 rounded-full transition-colors">
             <span class="material-symbols-outlined text-slate-600">settings</span>
         </button>
-        <img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant/20"
+        <img alt="User profile" class="w-8 h-8 rounded-full border border-slate-200"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPn9-h76O3kp8HDj7KFTdOitg_55G6mtfuTtuzWX3v7-oKc4uRenTHL0w3NEAgwVtoj8_gnZciIRCwevH4a0T8ADzmxHUBXLplTnZGKsokQsv08G_OSeuODQgn3W3DnSCRPBIyPIs72JwlCgobBTaD6DmEPs461RdDep7tybQX6MnOHzhnQU-0shHLPhhwo4on-llnb0hWt5pN8b_tb3cvtPvLk1MCRMDGuKTJqXdhelJIwzPQkcAkqUngv20Uzw3hDFDb0yIxQhRV" />
     </div>
-</header>
+</nav>
 
+<!-- Side Navigation -->
+<aside
+    class="h-screen fixed left-0 top-0 pt-20 border-r border-slate-100 flex flex-col gap-2 p-4 bg-slate-50 z-40 transition-all duration-300"
+    [style.width]="sidebarCollapsed ? '72px' : '256px'">
+    <nav class="flex flex-col gap-1">
+        <a class="flex items-center gap-3 px-3 py-2 bg-white text-red-700 shadow-sm rounded-md font-medium text-sm transition-all cursor-pointer"
+            [class.translate-x-1]="!sidebarCollapsed" [class.justify-center]="sidebarCollapsed" routerLink="/dgd-check">
+            <span class="material-symbols-outlined">deployed_code</span>
+            <span *ngIf="!sidebarCollapsed">DG Shipment</span>
+        </a>
+        <a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-red-50 transition-all rounded-md font-medium text-sm cursor-pointer"
+            [class.justify-center]="sidebarCollapsed" routerLink="/dgd-check">
+            <span class="material-symbols-outlined">fact_check</span>
+            <span *ngIf="!sidebarCollapsed">DGD Check</span>
+        </a>
+    </nav>
+    <div class="mt-auto flex flex-col gap-1 border-t border-slate-200 pt-4">
+        <a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-red-50 text-xs uppercase tracking-wide cursor-pointer"
+            [class.justify-center]="sidebarCollapsed">
+            <span class="material-symbols-outlined text-sm">headset_mic</span>
+            <span *ngIf="!sidebarCollapsed">Support</span>
+        </a>
+    </div>
+</aside>
 
 <!-- Main Content -->
-<main class="pt-20 px-8 pb-12 max-w-6xl mx-auto">
+<main class="pt-24 px-10 pb-12 min-h-screen bg-slate-50 transition-all duration-300"
+    [style.margin-left]="sidebarCollapsed ? '72px' : '256px'">
 
     <!-- Dashboard Header -->
     <div class="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -52,6 +69,17 @@
             class="bg-primary text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-red-800 transition-colors disabled:opacity-50">
             {{ isLoading ? 'Loading...' : 'Search' }}
         </button>
+    </div>
+
+    <!-- Empty State (no AWB searched yet) -->
+    <div *ngIf="!dashboardData && !isLoading && !error"
+        class="flex flex-col items-center justify-center py-24 gap-6 animate-fade-in-up">
+        <img src="assets/skyler.png" alt="Skyler" class="h-32 w-auto object-contain opacity-30">
+        <div class="text-center">
+            <h2 class="text-xl font-bold text-slate-300 tracking-tight">No DG Shipment Info</h2>
+            <p class="text-sm text-slate-300 mt-1">Search an AWB number above to view DG shipment information from ONE
+                Record.</p>
+        </div>
     </div>
 
     <!-- Loading State -->
@@ -195,9 +223,9 @@
                 <h2 class="font-headline font-bold text-lg text-on-surface">Shipment {{ si + 1 }}</h2>
                 <span class="ml-auto text-[10px] font-mono text-slate-400">{{ formatId(shipment.shipmentId) }}</span>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-6">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm mb-6">
                 <div>
-                    <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">Description</p>
+                    <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">Name</p>
                     <p class="font-semibold text-on-surface">{{ shipment.description || '—' }}</p>
                 </div>
                 <div>
@@ -209,9 +237,30 @@
                     <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">Pieces</p>
                     <p class="font-semibold text-on-surface">{{ shipment.pieces.length }}</p>
                 </div>
-                <div>
-                    <p class="text-[10px] font-bold uppercase text-slate-400 mb-1">Commodity</p>
-                    <p class="font-semibold text-on-surface">{{ shipment.commodity || '—' }}</p>
+            </div>
+
+            <!-- DG Declaration (Shipment Level) -->
+            <div *ngIf="shipment.dgDeclaration?.declarationType || shipment.dgDeclaration?.declarationDate || shipment.dgDeclaration?.shipperSignature"
+                class="border border-slate-100 rounded-lg bg-slate-50/50 px-4 py-3 mb-6">
+                <p class="text-[10px] font-extrabold uppercase text-slate-500 tracking-widest mb-2">DG Declaration
+                </p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                    <div>
+                        <p class="text-[10px] text-slate-400 mb-0.5">Handling Information</p>
+                        <p class="font-semibold">{{ shipment.dgDeclaration.declarationType || '—' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-slate-400 mb-0.5">Date</p>
+                        <p class="font-semibold">{{ shipment.dgDeclaration.declarationDate || '—' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-slate-400 mb-0.5">Shipper Signatory</p>
+                        <p class="font-semibold">{{ shipment.dgDeclaration.shipperSignature || '—' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-slate-400 mb-0.5">Exclusive Use</p>
+                        <p class="font-semibold">{{ shipment.dgDeclaration.complianceMethod || '—' }}</p>
+                    </div>
                 </div>
             </div>
 
@@ -248,16 +297,19 @@
                                         Proper Shipping Name</th>
                                     <th
                                         class="px-3 py-2 text-[10px] font-extrabold text-amber-700 uppercase tracking-widest">
-                                        Hazard Class</th>
+                                        Hazard Class Id</th>
                                     <th
                                         class="px-3 py-2 text-[10px] font-extrabold text-amber-700 uppercase tracking-widest">
-                                        Packing Group</th>
+                                        Hazard Category Code</th>
                                     <th
                                         class="px-3 py-2 text-[10px] font-extrabold text-amber-700 uppercase tracking-widest">
-                                        Quantity</th>
+                                        Packing Danger Level Code</th>
                                     <th
                                         class="px-3 py-2 text-[10px] font-extrabold text-amber-700 uppercase tracking-widest">
-                                        Packing Instr.</th>
+                                        Product Net Weight</th>
+                                    <th
+                                        class="px-3 py-2 text-[10px] font-extrabold text-amber-700 uppercase tracking-widest">
+                                        Packing Instr. Number</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-amber-50">
@@ -270,6 +322,7 @@
                                     </td>
                                     <td class="px-3 py-2 text-xs font-medium">{{ dg.properShippingName || '—' }}</td>
                                     <td class="px-3 py-2 text-xs">{{ dg.hazardClass || '—' }}</td>
+                                    <td class="px-3 py-2 text-xs">{{ dg.qValue || '—' }}</td>
                                     <td class="px-3 py-2 text-xs">{{ dg.packingGroup || '—' }}</td>
                                     <td class="px-3 py-2 text-xs">{{ dg.quantity || '—' }} {{ dg.unit || '' }}</td>
                                     <td class="px-3 py-2 text-xs font-mono">{{ dg.packingInstruction || '—' }}</td>
@@ -282,34 +335,11 @@
                     No dangerous goods entries on this piece.
                 </div>
 
-                <!-- DG Declaration -->
-                <div *ngIf="piece.dgDeclaration?.declarationType || piece.dgDeclaration?.declarationDate || piece.dgDeclaration?.shipperSignature"
-                    class="border-t border-slate-100 bg-slate-50/50 px-4 py-3">
-                    <p class="text-[10px] font-extrabold uppercase text-slate-500 tracking-widest mb-2">DG Declaration
-                    </p>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-                        <div>
-                            <p class="text-[10px] text-slate-400 mb-0.5">Type</p>
-                            <p class="font-semibold">{{ piece.dgDeclaration.declarationType || '—' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-[10px] text-slate-400 mb-0.5">Date</p>
-                            <p class="font-semibold">{{ piece.dgDeclaration.declarationDate || '—' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-[10px] text-slate-400 mb-0.5">Shipper Signature</p>
-                            <p class="font-semibold">{{ piece.dgDeclaration.shipperSignature || '—' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-[10px] text-slate-400 mb-0.5">Compliance Method</p>
-                            <p class="font-semibold">{{ piece.dgDeclaration.complianceMethod || '—' }}</p>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </div>
 
-        <!-- Checks Table (Waybill Master > Check) -->
+        <!-- Checks Accordion (Waybill Master > Check) -->
         <div class="bg-white rounded-xl border border-outline-variant/20 shadow-sm overflow-hidden mb-8">
             <div class="p-5 border-b border-slate-50 flex items-center gap-3 bg-surface-container-low">
                 <span class="material-symbols-outlined text-primary"
@@ -323,40 +353,123 @@
                 No check records found on this waybill.
             </div>
 
-            <div *ngIf="checks.length > 0" class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-slate-50/50">
-                            <th class="px-6 py-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
-                                Check Type</th>
-                            <th class="px-6 py-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
-                                Result</th>
-                            <th class="px-6 py-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
-                                Date</th>
-                            <th class="px-6 py-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
-                                Checked By</th>
-                            <th class="px-6 py-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
-                                Remarks</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100">
-                        <tr *ngFor="let check of checks" class="hover:bg-slate-50 transition-colors">
-                            <td class="px-6 py-4 text-xs font-semibold">{{ check.checkType || '—' }}</td>
-                            <td class="px-6 py-4">
-                                <span [ngClass]="{
-                  'bg-emerald-50 text-emerald-700 border-emerald-100': getCheckStatusClass(check.checkResult) === 'status-pass',
-                  'bg-red-50 text-red-700 border-red-100': getCheckStatusClass(check.checkResult) === 'status-fail',
-                  'bg-amber-50 text-amber-700 border-amber-100': getCheckStatusClass(check.checkResult) === 'status-pending'
-                }" class="px-3 py-1 rounded-full text-[10px] font-bold border">
-                                    {{ getCheckStatusLabel(check.checkResult) }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-xs text-slate-500">{{ check.checkDate || '—' }}</td>
-                            <td class="px-6 py-4 text-xs">{{ check.checkedBy || '—' }}</td>
-                            <td class="px-6 py-4 text-xs text-slate-500">{{ check.remarks || '—' }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- Accordion Items -->
+            <div *ngIf="checks.length > 0" class="divide-y divide-slate-100">
+                <div *ngFor="let check of checks; let ci = index">
+                    <!-- Parent Check Row (clickable) -->
+                    <div (click)="toggleCheck(ci)"
+                        class="flex items-center gap-4 px-6 py-4 cursor-pointer hover:bg-slate-50 transition-colors select-none">
+                        <!-- Expand/collapse icon -->
+                        <span class="material-symbols-outlined text-slate-400 text-lg transition-transform duration-200"
+                            [style.transform]="isCheckExpanded(ci) ? 'rotate(90deg)' : 'rotate(0deg)'">
+                            chevron_right
+                        </span>
+
+                        <!-- Check ID badge -->
+                        <span
+                            class="bg-slate-100 text-slate-700 px-2.5 py-1 rounded text-[10px] font-mono font-bold min-w-[50px] text-center">
+                            {{ check.checkId || '—' }}
+                        </span>
+
+                        <!-- Check Name -->
+                        <span class="text-xs font-semibold text-on-surface flex-1">{{ check.checkType || '—' }}</span>
+
+                        <!-- Check Status -->
+                        <span *ngIf="check.checkStatus"
+                            class="text-[10px] font-mono text-slate-500 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded">
+                            {{ check.checkStatus }}
+                        </span>
+
+                        <!-- Result badge -->
+                        <span [ngClass]="{
+                            'bg-emerald-50 text-emerald-700 border-emerald-100': getCheckStatusClass(check.checkResult) === 'status-pass',
+                            'bg-red-50 text-red-700 border-red-100': getCheckStatusClass(check.checkResult) === 'status-fail',
+                            'bg-amber-50 text-amber-700 border-amber-100': getCheckStatusClass(check.checkResult) === 'status-pending'
+                        }" class="px-3 py-1 rounded-full text-[10px] font-bold border">
+                            {{ getCheckStatusLabel(check.checkResult) }}
+                        </span>
+
+                        <!-- Created On -->
+                        <span class="text-[10px] text-slate-400 min-w-[100px] text-right">{{ check.createdOn || ''
+                            }}</span>
+
+                        <!-- Sub-check count -->
+                        <span *ngIf="check.subChecks?.length"
+                            class="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
+                            {{ check.subChecks.length }} sub
+                        </span>
+                    </div>
+
+                    <!-- Expanded Sub-checks -->
+                    <div *ngIf="isCheckExpanded(ci) && (check.subChecks?.length || 0) > 0"
+                        class="bg-slate-50/70 border-t border-slate-100">
+                        <div class="px-6 py-3">
+                            <p class="text-[10px] font-extrabold uppercase text-slate-400 tracking-widest mb-2 pl-9">
+                                Sub-checks ({{ check.subChecks.length }})
+                            </p>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse ml-9">
+                                    <thead>
+                                        <tr>
+                                            <th
+                                                class="px-3 py-2 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">
+                                                Check Name</th>
+                                            <th
+                                                class="px-3 py-2 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">
+                                                Result</th>
+                                            <th
+                                                class="px-3 py-2 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">
+                                                Date</th>
+                                            <th
+                                                class="px-3 py-2 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">
+                                                Checked By</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-100">
+                                        <tr *ngFor="let sc of check.subChecks"
+                                            class="hover:bg-white/60 transition-colors">
+                                            <td class="px-3 py-2 text-xs font-medium">{{ sc.checkType || '—' }}</td>
+                                            <td class="px-3 py-2">
+                                                <span [ngClass]="{
+                                                    'bg-emerald-50 text-emerald-700 border-emerald-100': getCheckStatusClass(sc.checkResult) === 'status-pass',
+                                                    'bg-red-50 text-red-700 border-red-100': getCheckStatusClass(sc.checkResult) === 'status-fail',
+                                                    'bg-amber-50 text-amber-700 border-amber-100': getCheckStatusClass(sc.checkResult) === 'status-pending'
+                                                }" class="px-2 py-0.5 rounded-full text-[10px] font-bold border">
+                                                    {{ getCheckStatusLabel(sc.checkResult) }}
+                                                </span>
+                                            </td>
+                                            <td class="px-3 py-2 text-xs text-slate-500">{{ sc.checkDate || '—' }}</td>
+                                            <td class="px-3 py-2 text-xs">{{ sc.checkedBy || '—' }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Expanded but no sub-checks -->
+                    <div *ngIf="isCheckExpanded(ci) && (!check.subChecks || check.subChecks.length === 0)"
+                        class="bg-slate-50/70 border-t border-slate-100 px-6 py-4">
+                        <div class="pl-9 grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                            <div>
+                                <p class="text-[10px] text-slate-400 mb-0.5">Date</p>
+                                <p class="font-semibold">{{ check.checkDate || '—' }}</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-slate-400 mb-0.5">Created On</p>
+                                <p class="font-semibold">{{ check.createdOn || '—' }}</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-slate-400 mb-0.5">Checked By</p>
+                                <p class="font-semibold">{{ check.checkedBy || '—' }}</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-slate-400 mb-0.5">Status</p>
+                                <p class="font-semibold">{{ check.checkStatus || '—' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -375,25 +488,19 @@
 </main>
 
 <!-- Footer -->
-<footer class="w-full py-8 mt-auto border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
-    <div class="flex flex-col md:flex-row justify-between items-center px-12 max-w-6xl mx-auto gap-6">
-        <div class="text-center md:text-left flex flex-col items-center md:items-start gap-2">
-            <img src="assets/logo.png" alt="A1R Cargo Rangers Logo" class="h-12 w-auto object-contain">
+<footer class="w-full py-8 border-t border-slate-200 bg-slate-50 transition-all duration-300"
+    [style.margin-left]="sidebarCollapsed ? '72px' : '256px'">
+    <div class="flex flex-col md:flex-row justify-between items-center px-12 gap-4">
+        <div class="flex flex-col items-start gap-1">
+            <img src="assets/logo.png" alt="A1R Cargo Rangers Logo" class="h-10 w-auto object-contain">
             <p class="text-[10px] text-slate-400">Made with ❤️ by A1R Cargo Rangers. The source code is available in
-                Github.</p>
+                Github.
+            </p>
         </div>
-        <div class="flex gap-8 font-inter text-xs tracking-wide uppercase font-medium">
-            <a
-                class="text-slate-500 hover:text-slate-900 underline underline-offset-4 transition-all opacity-80 hover:opacity-100 cursor-pointer">Terms
-                of Carriage</a>
-            <a
-                class="text-slate-500 hover:text-slate-900 underline underline-offset-4 transition-all opacity-80 hover:opacity-100 cursor-pointer">Safety
-                Protocol</a>
-            <a
-                class="text-slate-500 hover:text-slate-900 underline underline-offset-4 transition-all opacity-80 hover:opacity-100 cursor-pointer">Privacy</a>
-            <a
-                class="text-slate-500 hover:text-slate-900 underline underline-offset-4 transition-all opacity-80 hover:opacity-100 cursor-pointer">API
-                Docs</a>
+        <div class="flex gap-6 text-xs text-slate-500 uppercase tracking-wide">
+            <a class="hover:text-slate-800 cursor-pointer underline underline-offset-4">Terms of Carriage</a>
+            <a class="hover:text-slate-800 cursor-pointer underline underline-offset-4">Safety Protocol</a>
+            <a class="hover:text-slate-800 cursor-pointer underline underline-offset-4">API Docs</a>
         </div>
     </div>
 </footer>

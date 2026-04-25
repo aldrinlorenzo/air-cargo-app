@@ -36,8 +36,8 @@ export interface Shipment {
   totalWeight: string | null;
   weightUnit: string | null;
   pieceCount: string | null;
-  commodity: string | null;
   pieces: Piece[];
+  dgDeclaration: DgDeclaration;
 }
 
 export interface WaybillInfo {
@@ -50,12 +50,25 @@ export interface WaybillInfo {
   type: string | null;
 }
 
-export interface CheckResult {
+export interface SubCheck {
+  checkId: string | null;
   checkType: string | null;
   checkResult: string | null;
   checkDate: string | null;
   checkedBy: string | null;
-  remarks: string | null;
+  checkStatus: string | null;
+  createdOn: string | null;
+}
+
+export interface CheckResult {
+  checkId: string | null;
+  checkType: string | null;
+  checkResult: string | null;
+  checkDate: string | null;
+  checkedBy: string | null;
+  checkStatus: string | null;
+  createdOn: string | null;
+  subChecks: SubCheck[];
 }
 
 export interface AwbDashboardData {
