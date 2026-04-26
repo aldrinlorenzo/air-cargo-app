@@ -68,6 +68,7 @@ export class DgShipmentComponent {
   createdAt: string = '';
   dgd: DgdData | null = null;
   rawXml: string = '';
+  fileName: string = '';
 
   checkResults: CheckResult[] = [];
   checkStatus: 'PASSED' | 'FAILED' | '' = '';
@@ -111,6 +112,7 @@ export class DgShipmentComponent {
     if (e.target.files?.length) this.readFile(e.target.files[0]);
   }
   readFile(file: File) {
+    this.fileName = file.name;
     const reader = new FileReader();
     reader.onload = (ev: any) => {
       this.rawXml = ev.target.result;
@@ -573,6 +575,7 @@ Switzerland</ram:Name>
   reset() {
     this.currentStep = 1;
     this.rawXml = '';
+    this.fileName = '';
     this.shipmentId = '';
     this.dgd = null;
     this.checkResults = [];
