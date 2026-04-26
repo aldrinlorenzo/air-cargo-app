@@ -1,34 +1,72 @@
 <div class="fixed bottom-6 right-6 z-[60] flex flex-col items-end">
   
   <!-- Chat Window -->
-  <div *ngIf="isOpen" class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-80 sm:w-96 mb-4 overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col h-[500px] animate-fade-in-up">
+  <div *ngIf="isOpen" class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-80 sm:w-[420px] mb-4 overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col h-[560px] animate-fade-in-up">
     <!-- Header -->
-    <div class="bg-primary text-white px-4 py-3 flex justify-between items-center">
+    <div class="bg-gradient-to-r from-red-700 to-red-800 text-white px-4 py-3 flex justify-between items-center">
       <div class="flex items-center gap-2">
         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">support_agent</span>
-        <h3 class="font-bold font-headline">DGR Assistant</h3>
+        <div>
+          <h3 class="font-bold text-sm">Skyler DGR Assistant</h3>
+          <span class="text-[10px] opacity-80">Powered by Gemini AI</span>
+        </div>
       </div>
-      <button (click)="toggleChat()" class="hover:bg-white/20 p-1 rounded-full transition-colors flex items-center justify-center">
-        <span class="material-symbols-outlined text-sm">close</span>
-      </button>
+      <div class="flex items-center gap-2">
+        <!-- AWB data indicator -->
+        <span *ngIf="hasAwbData" class="flex items-center gap-1 bg-white/20 text-[9px] font-bold px-2 py-0.5 rounded-full">
+          <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+          AWB Loaded
+        </span>
+        <button (click)="toggleChat()" class="hover:bg-white/20 p-1 rounded-full transition-colors flex items-center justify-center">
+          <span class="material-symbols-outlined text-sm">close</span>
+        </button>
+      </div>
     </div>
 
     <!-- Messages -->
     <div id="chat-messages-container" class="flex-1 p-4 overflow-y-auto flex flex-col gap-3 bg-slate-50 dark:bg-slate-950">
       <div *ngFor="let msg of messages" class="flex" [ngClass]="{'justify-end': msg.role === 'user', 'justify-start': msg.role === 'assistant'}">
-        <div class="max-w-[85%] rounded-2xl px-4 py-2 text-sm"
+        <div class="max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed"
              [ngClass]="{
-               'bg-primary text-white rounded-br-none': msg.role === 'user',
+               'bg-red-700 text-white rounded-br-none': msg.role === 'user',
                'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 rounded-bl-none shadow-sm': msg.role === 'assistant'
              }">
-          <p class="whitespace-pre-wrap font-body">{{ msg.content }}</p>
+          <p class="whitespace-pre-wrap">{{ msg.content }}</p>
         </div>
       </div>
+
+      <!-- Quick action chips (show only when there are few messages and AWB data is loaded) -->
+      <div *ngIf="messages.length <= 2 && hasAwbData" class="flex flex-wrap gap-2 mt-2">
+        <button *ngFor="let action of quickActions"
+          (click)="useQuickAction(action)"
+          class="text-[11px] bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-full hover:bg-red-50 hover:border-red-200 hover:text-red-700 transition-all cursor-pointer shadow-sm">
+          {{ action }}
+        </button>
+      </div>
+
+      <!-- Quick actions when no AWB data -->
+      <div *ngIf="messages.length <= 2 && !hasAwbData" class="flex flex-wrap gap-2 mt-2">
+        <button (click)="useQuickAction('What is the DG declaration process?')"
+          class="text-[11px] bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-full hover:bg-red-50 hover:border-red-200 hover:text-red-700 transition-all cursor-pointer shadow-sm">
+          DG declaration process
+        </button>
+        <button (click)="useQuickAction('Explain IATA DG AutoCheck')"
+          class="text-[11px] bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-full hover:bg-red-50 hover:border-red-200 hover:text-red-700 transition-all cursor-pointer shadow-sm">
+          IATA DG AutoCheck
+        </button>
+        <button (click)="useQuickAction('What are the packing instructions for lithium batteries?')"
+          class="text-[11px] bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-full hover:bg-red-50 hover:border-red-200 hover:text-red-700 transition-all cursor-pointer shadow-sm">
+          Lithium battery PI
+        </button>
+      </div>
+
+      <!-- Loading indicator -->
       <div *ngIf="isLoading" class="flex justify-start">
-        <div class="bg-white border border-slate-200 rounded-2xl rounded-bl-none px-4 py-2 shadow-sm flex items-center gap-1">
-          <span class="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></span>
-          <span class="w-2 h-2 bg-slate-400 rounded-full animate-bounce delay-100"></span>
-          <span class="w-2 h-2 bg-slate-400 rounded-full animate-bounce delay-200"></span>
+        <div class="bg-white border border-slate-200 rounded-2xl rounded-bl-none px-4 py-3 shadow-sm flex items-center gap-2">
+          <span class="w-2 h-2 bg-red-400 rounded-full animate-bounce"></span>
+          <span class="w-2 h-2 bg-red-400 rounded-full animate-bounce delay-100"></span>
+          <span class="w-2 h-2 bg-red-400 rounded-full animate-bounce delay-200"></span>
+          <span class="text-[10px] text-slate-400 ml-1">Skyler is thinking…</span>
         </div>
       </div>
     </div>
@@ -36,8 +74,12 @@
     <!-- Input -->
     <div class="p-3 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
       <form (submit)="sendMessage()" class="flex items-center gap-2">
-        <input type="text" [(ngModel)]="userInput" name="userInput" placeholder="Ask about DGR compliance..." class="flex-1 bg-slate-100 dark:bg-slate-800 border-none rounded-full px-4 py-2 text-sm focus:ring-2 focus:ring-primary outline-none text-slate-900 dark:text-slate-100" [disabled]="isLoading" autocomplete="off">
-        <button type="submit" [disabled]="!userInput.trim() || isLoading" class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary-fixed transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+        <input type="text" [(ngModel)]="userInput" name="userInput" 
+          placeholder="Ask about DGR, shipments, checks..." 
+          class="flex-1 bg-slate-100 dark:bg-slate-800 border-none rounded-full px-4 py-2.5 text-sm focus:ring-2 focus:ring-red-500 outline-none text-slate-900 dark:text-slate-100" 
+          [disabled]="isLoading" autocomplete="off">
+        <button type="submit" [disabled]="!userInput.trim() || isLoading" 
+          class="w-10 h-10 rounded-full bg-red-700 text-white flex items-center justify-center hover:bg-red-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
           <span class="material-symbols-outlined text-sm" style="margin-left: 2px;">send</span>
         </button>
       </form>
@@ -45,13 +87,15 @@
   </div>
 
   <!-- Floating Button -->
-  <button (click)="toggleChat()" class="w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-105 transition-transform group relative">
+  <button (click)="toggleChat()" class="w-14 h-14 bg-red-700 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-105 hover:bg-red-800 transition-all group relative">
     <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">
       {{ isOpen ? 'expand_more' : 'chat_bubble' }}
     </span>
     <!-- Tooltip -->
-    <div *ngIf="!isOpen" class="absolute right-full mr-4 bg-slate-800 text-white text-[10px] font-bold py-2 px-3 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
-      DGR Assistant Online
+    <div *ngIf="!isOpen" class="absolute right-full mr-4 bg-slate-800 text-white text-[10px] font-bold py-2 px-3 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+      Skyler DGR Assistant
     </div>
+    <!-- AWB data dot indicator -->
+    <span *ngIf="hasAwbData && !isOpen" class="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-400 border-2 border-white rounded-full animate-pulse"></span>
   </button>
 </div>

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ApiService } from 'src/app/services/api.service';
 import { OneRecordService } from 'src/app/services/one-record.service';
 import { DgAutocheckService } from 'src/app/services/dg-autocheck.service';
-
+import { ChatbotService } from '../../services/chatbot.service';
 
 const API_BASE = 'http://localhost:8000';
 
@@ -95,7 +95,8 @@ export class DgShipmentComponent {
   constructor(private http: HttpClient,
     private apiService: ApiService,
     private oneRecordService: OneRecordService,
-    private dgAutocheckService: DgAutocheckService
+    private dgAutocheckService: DgAutocheckService,
+    private chatbotService: ChatbotService
   ) {}
 
   // ── File handling ─────────────────────────────────────────────────────────
@@ -110,7 +111,10 @@ export class DgShipmentComponent {
   }
   readFile(file: File) {
     const reader = new FileReader();
-    reader.onload = (ev: any) => { this.rawXml = ev.target.result; };
+    reader.onload = (ev: any) => {
+      this.rawXml = ev.target.result;
+      this.chatbotService.updateXmlContext(this.rawXml);
+    };
     reader.readAsText(file);
   }
 
@@ -316,6 +320,26 @@ Switzerland</ram:Name>
         // this.createdAt = res.created_at;
         this.isLoading = false;
         this.currentStep = 2;
+        this.chatbotService.updateAwbContext({
+          masterWaybill: { awbNumber: this.dgd?.awb_number, origin: this.dgd?.origin, destination: this.dgd?.destination },
+          shipments: [{
+            description: 'DG Shipment',
+            totalWeight: this.dgd?.gross_weight,
+            weightUnit: this.dgd?.weight_unit,
+            pieces: [{
+              dangerousGoods: (this.dgd?.dg_items || []).map((item: any) => ({
+                unNumber: item.un_number,
+                properShippingName: item.proper_shipping_name,
+                hazardClass: item.hazard_class,
+                packingGroup: item.packing_group,
+                packingInstruction: item.packing_instruction,
+                quantity: item.quantity,
+                unit: item.quantity_unit
+              }))
+            }]
+          }],
+          checks: []
+        });
       },
       error: (err) => {
         this.isLoading = false;

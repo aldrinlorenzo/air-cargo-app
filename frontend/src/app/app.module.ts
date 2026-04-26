@@ -9,6 +9,7 @@ import { DgConverterComponent } from './components/dg-converter/dg-converter.com
 import { ChatbotComponent } from './components/chatbot/chatbot.component';
 import { JsonConverterComponent } from './components/json-converter/json-converter.component';
 import { DgShipmentComponent } from './components/dg-shipment/dg-shipment.component';
+import { DgrDashboard } from './components/dg-dashboard/dg-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { DgShipmentComponent } from './components/dg-shipment/dg-shipment.compon
     DgConverterComponent,
     ChatbotComponent,
     JsonConverterComponent,
-    DgShipmentComponent
+    DgShipmentComponent,
+    DgrDashboard
   ],
   imports: [
     BrowserModule,
