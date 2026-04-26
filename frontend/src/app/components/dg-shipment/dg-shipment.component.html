@@ -157,39 +157,46 @@
           against IATA DGR regulations and returns a detailed check result.</p>
       </div>
 
-      <!-- What gets sent -->
-      <div class="mt-6 bg-slate-50 rounded-xl border border-slate-200 p-5">
-        <div class="flex items-center gap-2 mb-3">
-          <span class="material-symbols-outlined text-slate-500 text-sm">send</span>
-          <span class="text-xs font-bold uppercase tracking-wider text-slate-500">What's being sent to DG
-            AutoCheck</span>
-        </div>
+      <!-- What gets sent — collapsible preview -->
+      <div class="mt-6 bg-slate-50 rounded-xl border border-slate-200 overflow-hidden">
+        <button class="w-full flex items-center justify-between gap-2 px-5 py-4 hover:bg-slate-100 transition-colors text-left"
+          (click)="step2PreviewExpanded = !step2PreviewExpanded">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-slate-500 text-sm">send</span>
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">What's being sent to DG AutoCheck</span>
+            <span class="text-[10px] text-slate-400 font-medium ml-2">Click to {{ step2PreviewExpanded ? 'collapse' : 'expand' }}</span>
+          </div>
+          <span class="material-symbols-outlined text-slate-400 text-sm transition-transform duration-200"
+            [style.transform]="step2PreviewExpanded ? 'rotate(180deg)' : 'rotate(0deg)'">expand_more</span>
+        </button>
 
-        <div class="grid grid-cols-2 gap-x-6 gap-y-4 text-sm">
-          <ng-container *ngTemplateOutlet="recursiveGrid; context: { $implicit: humanReadable, parentLabel: '' }">
-          </ng-container>
+        <div *ngIf="step2PreviewExpanded" class="border-t border-slate-200 px-5 py-4 max-h-[400px] overflow-y-auto step2-scroll">
+          <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+            <ng-container *ngTemplateOutlet="recursiveGrid; context: { $implicit: humanReadable, parentLabel: '' }">
+            </ng-container>
+          </div>
         </div>
 
         <ng-template #recursiveGrid let-obj let-parentLabel="parentLabel">
           <ng-container *ngFor="let item of obj | keyvalue: keepOrder">
-            
+
             <ng-container *ngIf="isObject(item.value); else simpleValue">
-              
-              <div *ngIf="isArray(obj)" class="col-span-2 mt-4 mb-1">
-                <h3 class="text-blue-600 font-bold uppercase text-[11px] tracking-wider border-b border-blue-50">
-                  {{ getArrayItemHeader(parentLabel, item.key) }} 
+
+              <div *ngIf="isArray(obj)" class="col-span-2 mt-3 mb-1">
+                <h3 class="text-blue-600 font-bold uppercase text-[11px] tracking-wider border-b border-blue-50 pb-1">
+                  {{ getArrayItemHeader(parentLabel, item.key) }}
                 </h3>
               </div>
 
-              <div *ngIf="!isArray(obj) && !isArray(item.value)" class="col-span-2 mt-4 mb-1">
+              <div *ngIf="!isArray(obj) && !isArray(item.value)" class="col-span-2 mt-3 mb-1">
                 <h3 class="text-blue-800 font-bold uppercase text-[11px] tracking-wider">
                   {{ formatLabel(item.key) }}
                 </h3>
               </div>
 
-              <ng-container *ngTemplateOutlet="recursiveGrid; context: { 
-                  $implicit: item.value, 
-                  parentLabel: isArray(obj) ? parentLabel : formatLabel(item.key) 
+              <ng-container *ngTemplateOutlet="recursiveGrid; context: {
+                  $implicit: item.value,
+                  parentLabel: isArray(obj) ? parentLabel : formatLabel(item.key)
                 }">
               </ng-container>
             </ng-container>
@@ -205,25 +212,6 @@
               </div>
             </ng-template>
 
-          </ng-container>
-        </ng-template>
-
-        <div class="grid grid-cols-2 gap-3 text-sm">
-          <ng-container 
-            *ngTemplateOutlet="recursiveGrid; context: { $implicit: humanReadable }">
-          </ng-container>
-        </div>
-
-        <ng-template #recursiveGrid let-obj>
-          <ng-container *ngFor="let item of obj | keyvalue">
-            <div *ngIf="!isObject(item.value)">
-              <span class="label">{{ formatLabel(item.key) }}: </span>
-              <span class="value">{{ item.value }}</span>
-            </div>
-            
-            <ng-container *ngIf="isObject(item.value)">
-              <ng-container *ngTemplateOutlet="recursiveGrid; context: { $implicit: item.value }"></ng-container>
-            </ng-container>
           </ng-container>
         </ng-template>
       </div>

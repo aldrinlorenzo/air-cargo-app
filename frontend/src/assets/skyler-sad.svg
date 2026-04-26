@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none">
+  <!-- Body (fuselage) -->
+  <ellipse cx="100" cy="85" rx="70" ry="35" fill="#7a001d"/>
+  <ellipse cx="100" cy="85" rx="70" ry="35" fill="url(#bodyGrad)"/>
+  
+  <!-- Tail fin -->
+  <path d="M30 70 L15 30 L45 35 L40 65Z" fill="#87CEEB"/>
+  <path d="M30 70 L15 30 L45 35 L40 65Z" fill="url(#tailGrad)"/>
+  
+  <!-- Wing -->
+  <path d="M75 65 L90 25 L110 25 L100 60Z" fill="#7a001d" opacity="0.8"/>
+  
+  <!-- Tail horizontal stabilizer -->
+  <path d="M30 90 L10 110 L45 105 L38 92Z" fill="#7a001d" opacity="0.7"/>
+  
+  <!-- Engine under wing -->
+  <ellipse cx="105" cy="105" rx="10" ry="7" fill="#5a0015" opacity="0.6"/>
+  
+  <!-- Nose -->
+  <ellipse cx="165" cy="85" rx="12" ry="20" fill="#8a0020"/>
+  
+  <!-- Cockpit window area -->
+  <ellipse cx="148" cy="78" rx="18" ry="14" fill="#d4e9f7"/>
+  <ellipse cx="148" cy="78" rx="15" ry="11" fill="white" opacity="0.5"/>
+  
+  <!-- Eyes -->
+  <ellipse cx="142" cy="76" rx="6" ry="7" fill="white"/>
+  <ellipse cx="156" cy="76" rx="6" ry="7" fill="white"/>
+  <ellipse cx="143" cy="78" rx="3.5" ry="4" fill="#3a1010"/>
+  <ellipse cx="157" cy="78" rx="3.5" ry="4" fill="#3a1010"/>
+  <!-- Eye highlights -->
+  <circle cx="144" cy="76" r="1.5" fill="white"/>
+  <circle cx="158" cy="76" r="1.5" fill="white"/>
+  
+  <!-- Sad eyebrows -->
+  <path d="M135 70 L145 67" stroke="#3a1010" stroke-width="2" stroke-linecap="round"/>
+  <path d="M165 70 L155 67" stroke="#3a1010" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Sad mouth -->
+  <path d="M143 90 Q150 86 157 90" stroke="#3a1010" stroke-width="2" stroke-linecap="round" fill="none"/>
+  
+  <!-- Tears -->
+  <path d="M140 82 Q138 92 140 98" stroke="#87CEEB" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.8">
+    <animate attributeName="d" values="M140 82 Q138 92 140 98;M140 82 Q137 95 139 105;M140 82 Q138 92 140 98" dur="2s" repeatCount="indefinite"/>
+  </path>
+  <path d="M158 82 Q160 92 158 98" stroke="#87CEEB" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.8">
+    <animate attributeName="d" values="M158 82 Q160 92 158 98;M158 82 Q161 95 159 105;M158 82 Q160 92 158 98" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+  </path>
+  
+  <!-- Tear drops -->
+  <circle cx="140" cy="100" r="3" fill="#87CEEB" opacity="0.6">
+    <animate attributeName="cy" values="100;120;100" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.6;0;0.6" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="158" cy="100" r="3" fill="#87CEEB" opacity="0.6">
+    <animate attributeName="cy" values="100;120;100" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+    <animate attributeName="opacity" values="0.6;0;0.6" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+  </circle>
+  
+  <!-- Wheels -->
+  <circle cx="85" cy="118" r="5" fill="#5a0015"/>
+  <circle cx="115" cy="118" r="5" fill="#5a0015"/>
+  <circle cx="85" cy="118" r="2" fill="#8a0020"/>
+  <circle cx="115" cy="118" r="2" fill="#8a0020"/>
+  
+  <!-- Landing gear struts -->
+  <line x1="85" y1="110" x2="85" y2="113" stroke="#5a0015" stroke-width="2"/>
+  <line x1="115" y1="110" x2="115" y2="113" stroke="#5a0015" stroke-width="2"/>
+  
+  <defs>
+    <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9a0025" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#5a0015" stop-opacity="0.2"/>
+    </linearGradient>
+    <linearGradient id="tailGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#a0d8ef" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#5bb5d5" stop-opacity="0.2"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -76,6 +76,7 @@ export class DgShipmentComponent {
   apiNote: string = '';
 
   humanReadable = '';
+  step2PreviewExpanded = false;
   acceptanceCheckId = '';
   airWaybillNumber = '';
   fullAwb: any = {};
